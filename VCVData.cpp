@@ -9,9 +9,9 @@
 QVCVData::QVCVData()
 {
 	initicialition = false;
-	undo_action = NULL;
-	redo_action = NULL;
-	operation_undostack = NULL;	
+    undo_action = nullptr;
+    redo_action = nullptr;
+    operation_undostack = nullptr;
 }
 
 QVCVData::QVCVData(const QVCVData &VCVData)
@@ -21,11 +21,14 @@ QVCVData::QVCVData(const QVCVData &VCVData)
 
 QVCVData::~QVCVData()
 {
-	original_image.release();
-	display_image.release();
-	delete operation_undostack;
-	delete undo_action;
-	delete redo_action;
+//    original_image.release();
+//    display_image.release();
+    if(operation_undostack!=nullptr)
+        delete operation_undostack;
+    if(undo_action!=nullptr)
+        delete undo_action;
+    if(redo_action!=nullptr)
+        delete redo_action;
 }
 
 const QVCVData& QVCVData::operator = (const QVCVData &VCVData)
@@ -42,8 +45,7 @@ bool QVCVData::New(int width,int height,int type, int resolution,const Scalar& s
 		return false;
 
 	original_image.create(height,width,type);
-	//original_imag
-
+    return true;
 }
 
 bool QVCVData::Load(const QString &file_name)
@@ -77,12 +79,12 @@ bool QVCVData::SaveAs(QString &file_name)
 
 QVCVUndoCommand* QVCVData::GetStep(int step)
 {
-	return NULL;
+    return nullptr;
 }
 
 bool QVCVData::AddStep(QVCVUndoCommand *command)
 {
-	if(command==NULL)
+    if(command==nullptr)
 		return false;
 
 	operation_undostack->push(command);
@@ -96,13 +98,13 @@ bool QVCVData::DeleteStep(int step)
 
 void QVCVData::RegisterViewer(QVCVChildWindow *viewer)
 {
-	if(viewer!=NULL)
+    if(viewer!=nullptr)
 		data_viewer = viewer;
 }
 
 bool QVCVData::Initialize()
 {
-	if((operation_undostack = new QUndoStack)==NULL)
+    if((operation_undostack = new QUndoStack)==nullptr)
 		return false;
 
 	undo_action = operation_undostack->createUndoAction(this,tr("&Undo"));

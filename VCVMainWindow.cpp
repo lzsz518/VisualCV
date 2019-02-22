@@ -131,8 +131,11 @@ void QVCVMainWindow::CreateMenu()
 
 void QVCVMainWindow::WindowActive(QMdiSubWindow *subwin)
 {
-    if(subwin==NULL)
+    if(subwin==nullptr)
+    {
+        edit_menu->clear();
         return;
+    }
     QDataModelInstance::Instance()->Notify();
     QVCVData *current_data = QDataModelInstance::Instance()->GetData(subwin->windowTitle().toStdString().c_str());
     edit_menu->clear();
@@ -150,14 +153,14 @@ void QVCVMainWindow::OpenFile()
 {
     QStringList files;
     files = QFileDialog::getOpenFileNames(this,
-                                          tr("Open Image"), "/home", tr("Image Files (*.png *.jpg *.bmp)"));
+                                          tr("Open Image"), "/home/bobo/Pictures", tr("Image Files (*.png *.jpg *.bmp)"));
 
     if(files.size()<0)
         return;
 
     int i;
-    QVCVData *vcvdata = NULL;
-    QVCVChildWindow *viewer = NULL;
+    QVCVData *vcvdata = nullptr;
+    QVCVChildWindow *viewer = nullptr;
     for(i=0;i<files.size();++i)
     {
         vcvdata = new QVCVData;
@@ -170,6 +173,7 @@ void QVCVMainWindow::OpenFile()
         viewer->setWindowTitle(files.at(i));
         mdi_area->addSubWindow(sub_win);
         QDataModelInstance::Instance()->AddData(vcvdata);
+        QDataModelInstance::Instance()->Notify();
 
         viewer->show();
     }
@@ -269,33 +273,33 @@ void QVCVMainWindow::Canny_action()
 
 void QVCVMainWindow::ZoomIn()
 {
-    if(mdi_area->activeSubWindow()!=NULL)
+    if(mdi_area->activeSubWindow()!=nullptr)
         ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->SetDisplayScale(
                             ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->GetDisplayScale()*1.1);
 }
 
 void QVCVMainWindow::ZoomOut()
 {
-    if(mdi_area->activeSubWindow()!=NULL)
+    if(mdi_area->activeSubWindow()!=nullptr)
         ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->SetDisplayScale(
                             ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->GetDisplayScale()*0.9);
 }
 
 void QVCVMainWindow::NormalSize()
 {
-    if(mdi_area->activeSubWindow()!=NULL)
+    if(mdi_area->activeSubWindow()!=nullptr)
         ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->SetDisplayScale(1.0);
 }
 
 
 void QVCVMainWindow::ShowFilterPanel(VCV_IMAGE_OPERATION operation)
 {
-    if(mdi_area->activeSubWindow()==NULL)
+    if(mdi_area->activeSubWindow()==nullptr)
         return;
 
     QFilterPanel *filterpanel = ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->GetFilterPanel(operation);
 
-    if(filterpanel!=NULL)
+    if(filterpanel!=nullptr)
     {
         filterpanel->show();
     }
@@ -303,30 +307,30 @@ void QVCVMainWindow::ShowFilterPanel(VCV_IMAGE_OPERATION operation)
 
 void QVCVMainWindow::ShowThresholdPanel(VCV_IMAGE_OPERATION operation)
 {
-    if(mdi_area->activeSubWindow()==NULL)
+    if(mdi_area->activeSubWindow()==nullptr)
         return;
 
     QThresholdPanel *thresholdpanel = ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->GetThresholdPanel(operation);
-    if(thresholdpanel!=NULL)
+    if(thresholdpanel!=nullptr)
         thresholdpanel->show();
 }
 
 void QVCVMainWindow::ShowMorphologicalPanel(VCV_IMAGE_OPERATION operation)
 {
-    if(mdi_area->activeSubWindow()==NULL)
+    if(mdi_area->activeSubWindow()==nullptr)
         return;
     QMorphologyPanel *moph_panel = ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->GetMorphologyPanel(operation);
 
-    if(moph_panel!=NULL)
+    if(moph_panel!=nullptr)
         moph_panel->show();
 }
 
 void QVCVMainWindow::ShowEdgeDetectionPanel(VCV_IMAGE_OPERATION operation)
 {
-    if(mdi_area->activeSubWindow()==NULL)
+    if(mdi_area->activeSubWindow()==nullptr)
         return;
     QEdgeDetectionPanel *edge_panel = ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->GetEdgeDetectionPanel(operation);
-    if(edge_panel!=NULL)
+    if(edge_panel!=nullptr)
         edge_panel->show();
 }
 
@@ -337,7 +341,7 @@ void QVCVMainWindow::CreateConnection()
     connect(file_menu_saveas,SIGNAL(triggered()),this,SLOT(Saveas()));
 
 
-    connect(mdi_area,SIGNAL(subWindowActivated(QMdiSubWindow*)),this,SLOT(WindowActive(QMdiSubWindow*)));
+//    connect(mdi_area,SIGNAL(subWindowActivated(QMdiSubWindow*)),this,SLOT(WindowActive(QMdiSubWindow*)));
 
     connect(filter_blur,SIGNAL(triggered()),this,SLOT(BlurFilter()));
     connect(filter_gaussian,SIGNAL(triggered()),this,SLOT(GaussianBlurFilter()));

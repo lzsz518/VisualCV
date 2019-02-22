@@ -24,13 +24,14 @@ void QVCVDataModel::AddData(QVCVData *data)
 
 bool QVCVDataModel::DeleteData(int index)
 {
-	if((index<0)||(index>data_list.size()))
-		return false;
+    if((index<0)||(index>data_list.size()))
+        return false;
 
-    QVCVData *data = data_list[index];
+    QVCVData *data = GetData(index);
+    data_list.erase(data_list.begin()+index);
+
     delete data;
-	data_list.erase(data_list.begin()+index);
-	return true;
+    return true;
 }
 
 bool QVCVDataModel::DeleteData(const QString &file_name)
@@ -77,6 +78,8 @@ int QVCVDataModel::Count()
 
 void QVCVDataModel::Notify()
 {
+    if(data_list.empty())
+        return;
 	vector<QVCVData*>::iterator itor;
 	for(itor=data_list.begin();itor!=data_list.end();++itor)
 	{

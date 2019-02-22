@@ -19,7 +19,7 @@
 QVCVChildWindow::QVCVChildWindow(QWidget *parent, Qt::WindowFlags f)
         :QWidget(parent,f)
 {
-    update_image = NULL;
+    update_image = nullptr;
     setAttribute(Qt::WA_DeleteOnClose);
     setMinimumSize(300,300);
 
@@ -28,16 +28,16 @@ QVCVChildWindow::QVCVChildWindow(QWidget *parent, Qt::WindowFlags f)
 
     display_scale = 1.0;
 
-    filter_panel = NULL;
-    customfilter_panel = NULL;
-    filter_command = NULL;
-    custom_filter_command = NULL;
-    threshold_panel = NULL;
-    threshold_command = NULL;
-    morphology_panel = NULL;
-    morphology_command = NULL;
-    edgedetection_panel = NULL;
-    edgedetection_command = NULL;
+    filter_panel = nullptr;
+    customfilter_panel = nullptr;
+    filter_command = nullptr;
+    custom_filter_command = nullptr;
+    threshold_panel = nullptr;
+    threshold_command = nullptr;
+    morphology_panel = nullptr;
+    morphology_command = nullptr;
+    edgedetection_panel = nullptr;
+    edgedetection_command = nullptr;
 
     connect(v_scrollbar,SIGNAL(valueChanged(int)),this,SLOT(repaint()));
     connect(h_scrollbar,SIGNAL(valueChanged(int)),this,SLOT(repaint()));
@@ -45,27 +45,30 @@ QVCVChildWindow::QVCVChildWindow(QWidget *parent, Qt::WindowFlags f)
 
 QVCVChildWindow::~QVCVChildWindow()
 {
-    if(update_image!=NULL)
+    if(update_image!=nullptr)
+    {
         delete update_image;
-    if(filter_panel!=NULL)
+        update_image = nullptr;
+    }
+    if(filter_panel!=nullptr)
     {
         delete filter_panel;
-        filter_panel = NULL;
+        filter_panel = nullptr;
     }
-    if(customfilter_panel!=NULL)
+    if(customfilter_panel!=nullptr)
     {
         delete customfilter_panel;
-        customfilter_panel = NULL;
+        customfilter_panel = nullptr;
     }
-    if(threshold_panel != NULL)
+    if(threshold_panel != nullptr)
     {
         delete threshold_panel;
-        threshold_panel = NULL;
+        threshold_panel = nullptr;
     }
-    if(morphology_panel!=NULL)
+    if(morphology_panel!=nullptr)
     {
         delete morphology_panel;
-        morphology_panel = NULL;
+        morphology_panel = nullptr;
     }
 }
 
@@ -77,7 +80,7 @@ bool QVCVChildWindow::Update(const Mat &image)
     if(image.empty())
         return false;
 
-    if(update_image!=NULL)
+    if(update_image!=nullptr)
         delete update_image;
 
     update_image = MatToQImage(image);
@@ -103,12 +106,12 @@ float QVCVChildWindow::GetDisplayScale()
 
 QFilterPanel* QVCVChildWindow::GetFilterPanel(VCV_IMAGE_OPERATION operation)
 {
-    if(filter_panel==NULL)
+    if(filter_panel==nullptr)
     {
         filter_panel = new QFilterPanel(this,Qt::WindowStaysOnTopHint);
 
-        if(filter_panel==NULL)
-            return NULL;
+        if(filter_panel==nullptr)
+            return nullptr;
         connect(filter_panel,SIGNAL(ParameterChange(const CommandParameter*)),this,SLOT(FilterParameterChangeRespond(const CommandParameter*)));
         connect(filter_panel,SIGNAL(PanelOk(const CommandParameter*)),this,SLOT(FilterPanelOk(const CommandParameter*)));
         connect(filter_panel,SIGNAL(PanelCancel(const CommandParameter*)),this,SLOT(FilterPanelCancel(const CommandParameter*)));
@@ -121,11 +124,11 @@ QFilterPanel* QVCVChildWindow::GetFilterPanel(VCV_IMAGE_OPERATION operation)
 
 QCustomFilterDlg* QVCVChildWindow::GetCustomFilterPanel()
 {
-    if(customfilter_panel==NULL)
+    if(customfilter_panel==nullptr)
     {
         customfilter_panel = new QCustomFilterDlg(this,Qt::WindowStaysOnTopHint);
-        if(customfilter_panel==NULL)
-            return NULL;
+        if(customfilter_panel==nullptr)
+            return nullptr;
         connect(customfilter_panel,SIGNAL(ParameterChange(const CommandParameter*)),this,SLOT(CustomFilterParameterChange(const CommandParameter*)));
         connect(customfilter_panel,SIGNAL(PanelOk(const CommandParameter*)),this,SLOT(CustomFilterPanelOk(const CommandParameter*)));
         connect(customfilter_panel,SIGNAL(PanelCancel(const CommandParameter*)),this,SLOT(CustomFilterPanelCancel(const CommandParameter*)));
@@ -138,11 +141,11 @@ QCustomFilterDlg* QVCVChildWindow::GetCustomFilterPanel()
 
 QThresholdPanel* QVCVChildWindow::GetThresholdPanel(VCV_IMAGE_OPERATION operation)
 {
-    if(threshold_panel==NULL)
+    if(threshold_panel==nullptr)
     {
         threshold_panel = new QThresholdPanel(this,Qt::WindowStaysOnTopHint);
-        if(threshold_panel==NULL)
-            return NULL;
+        if(threshold_panel==nullptr)
+            return nullptr;
 
         connect(threshold_panel,SIGNAL(ParameterChange(const CommandParameter*)),this,SLOT(ThresholdParameterChange(const CommandParameter*)));
         connect(threshold_panel,SIGNAL(PanelOk(const CommandParameter*)),this,SLOT(ThresholdPanelOk(const CommandParameter*)));
@@ -156,11 +159,11 @@ QThresholdPanel* QVCVChildWindow::GetThresholdPanel(VCV_IMAGE_OPERATION operatio
 
 QMorphologyPanel* QVCVChildWindow::GetMorphologyPanel(VCV_IMAGE_OPERATION operation)
 {
-    if(morphology_panel==NULL)
+    if(morphology_panel==nullptr)
     {
         morphology_panel = new QMorphologyPanel(this,Qt::WindowStaysOnTopHint);
-        if(morphology_panel==NULL)
-            return NULL;
+        if(morphology_panel==nullptr)
+            return nullptr;
 
         connect(morphology_panel,SIGNAL(ParameterChange(const CommandParameter*)),this,SLOT(MorphologyParameterChange(const CommandParameter*)));
         connect(morphology_panel,SIGNAL(PanelOk(const CommandParameter*)),this,SLOT(MorphologyPanelOk(const CommandParameter*)));
@@ -174,11 +177,11 @@ QMorphologyPanel* QVCVChildWindow::GetMorphologyPanel(VCV_IMAGE_OPERATION operat
 
 QEdgeDetectionPanel* QVCVChildWindow::GetEdgeDetectionPanel(VCV_IMAGE_OPERATION operation)
 {
-    if(edgedetection_panel==NULL)
+    if(edgedetection_panel==nullptr)
     {
         edgedetection_panel = new QEdgeDetectionPanel(this,Qt::WindowStaysOnTopHint);
-        if(edgedetection_panel==NULL)
-            return NULL;
+        if(edgedetection_panel==nullptr)
+            return nullptr;
 
         connect(edgedetection_panel,SIGNAL(ParameterChange(const CommandParameter*)),this,SLOT(EdgeDetectionParameterChange(const CommandParameter*)));
         connect(edgedetection_panel,SIGNAL(PanelOk(const CommandParameter*)),this,SLOT(EdgeDetectionPanelOk(const CommandParameter*)));
@@ -194,7 +197,7 @@ QEdgeDetectionPanel* QVCVChildWindow::GetEdgeDetectionPanel(VCV_IMAGE_OPERATION 
 //slot function
 void QVCVChildWindow::FilterParameterChangeRespond(const CommandParameter *para)
 {
-    if(filter_command==NULL)
+    if(filter_command==nullptr)
         return;
 
     if(!filter_command->IsInit())
@@ -213,7 +216,7 @@ void QVCVChildWindow::FilterParameterChangeRespond(const CommandParameter *para)
 
 void QVCVChildWindow::FilterPanelOk(const CommandParameter *para)
 {
-    if(filter_command==NULL)
+    if(filter_command==nullptr)
         return;
 
     if(!filter_command->IsInit())
@@ -227,14 +230,14 @@ void QVCVChildWindow::FilterPanelOk(const CommandParameter *para)
             return;
     }
 
-    if(operator_data!=NULL)
+    if(operator_data!=nullptr)
         operator_data->AddStep(filter_command);
-    filter_command = NULL;
+    filter_command = nullptr;
 }
 
 void QVCVChildWindow::FilterPanelCancel(const CommandParameter *para)
 {
-    if(filter_command==NULL)
+    if(filter_command==nullptr)
         return;
 
     if(!filter_command->IsInit())
@@ -242,7 +245,7 @@ void QVCVChildWindow::FilterPanelCancel(const CommandParameter *para)
             return;
     filter_command->undo();
     delete filter_command;
-    filter_command = NULL;
+    filter_command = nullptr;
 }
 
 void QVCVChildWindow::CustomFilterParameterChange(const CommandParameter *para)
@@ -327,7 +330,7 @@ void QVCVChildWindow::HScrollBarRangeChanged(int min, int max)
 
 void QVCVChildWindow::paintEvent(QPaintEvent *e)
 {
-    if(update_image==NULL)
+    if(update_image==nullptr)
     {
         QWidget::paintEvent(e);
         return;
@@ -340,8 +343,8 @@ void QVCVChildWindow::paintEvent(QPaintEvent *e)
 
 void QVCVChildWindow::closeEvent(QCloseEvent *e)
 {
-    QDataModelInstance::Instance()->DeleteData(windowTitle());
     QWidget::closeEvent(e);
+    QDataModelInstance::Instance()->DeleteData(windowTitle());
 }
 
 void QVCVChildWindow::resizeEvent(QResizeEvent *e)
@@ -368,13 +371,13 @@ void QVCVChildWindow::AdjustScrollBar()
     width  = size().width()-SCROLLBAR_SIZE;
     h_scrollbar->setGeometry(0, y, width, height);
 
-    if(update_image!=NULL)
+    if(update_image!=nullptr)
         AdjustScrollBarRange();
 }
 
 void QVCVChildWindow::AdjustScrollBarRange()
 {
-    if(update_image==NULL)
+    if(update_image==nullptr)
         return;
 
     if(update_image->height()*display_scale-height()+SCROLLBAR_SIZE>0)
@@ -402,7 +405,7 @@ void QVCVChildWindow::AdjustScrollBarRange()
 
 void QVCVChildWindow::DrawClient()
 {
-    if(update_image==NULL)
+    if(update_image==nullptr)
         return;
 
     QPainter painter(this);
@@ -442,7 +445,7 @@ void QVCVChildWindow::DrawClient()
 
 void QVCVChildWindow::DoOperation(QControlPanel *panel,QVCVUndoCommand **command, VCV_IMAGE_OPERATION operation)
 {
-    if(command == NULL)
+    if(command == nullptr)
         return;
 
     if(QDataModelInstance::Instance()->Count()<=0)
@@ -450,7 +453,7 @@ void QVCVChildWindow::DoOperation(QControlPanel *panel,QVCVUndoCommand **command
 
     operator_data = QDataModelInstance::Instance()->GetData(windowTitle().toStdString().c_str());
 
-    if(operator_data==NULL)
+    if(operator_data==nullptr)
         return;
 
     panel->BeginOperation(operation);
@@ -460,7 +463,7 @@ void QVCVChildWindow::DoOperation(QControlPanel *panel,QVCVUndoCommand **command
 
 void QVCVChildWindow::PanelValueChange(QVCVUndoCommand *command, const CommandParameter *para)
 {
-    if(command==NULL)
+    if(command==nullptr)
         return;
 
     if(!command->IsInit())
@@ -479,7 +482,7 @@ void QVCVChildWindow::PanelValueChange(QVCVUndoCommand *command, const CommandPa
 
 void QVCVChildWindow::PanelOk(QVCVUndoCommand **command, const CommandParameter *para)
 {
-    if(*command==NULL)
+    if(*command==nullptr)
         return;
 
     if(!(*command)->IsInit())
@@ -493,14 +496,14 @@ void QVCVChildWindow::PanelOk(QVCVUndoCommand **command, const CommandParameter 
             return;
     }
 
-    if(operator_data!=NULL)
+    if(operator_data!=nullptr)
         operator_data->AddStep(*command);
-    *command = NULL;
+    *command = nullptr;
 }
 
 void QVCVChildWindow::PanelCencel(QVCVUndoCommand **command, const CommandParameter *para)
 {
-     if(*command==NULL)
+     if(*command==nullptr)
         return;
 
     if(!(*command)->IsInit())
@@ -508,5 +511,5 @@ void QVCVChildWindow::PanelCencel(QVCVUndoCommand **command, const CommandParame
             return;
     (*command)->undo();
     delete *command;
-    *command = NULL;
+    *command = nullptr;
 }

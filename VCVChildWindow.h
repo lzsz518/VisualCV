@@ -23,7 +23,7 @@ class QVCVChildWindow : public QWidget
 {
 	Q_OBJECT
 public:
-	QVCVChildWindow(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    QVCVChildWindow(QWidget *parent = nullptr, Qt::WindowFlags f = nullptr);
 	~QVCVChildWindow();
 
 public:
@@ -60,7 +60,7 @@ protected slots:
 
 protected:
 	virtual void paintEvent(QPaintEvent *e);
-	virtual void closeEvent(QCloseEvent *e);
+    virtual void closeEvent(QCloseEvent *e);
 	virtual void resizeEvent(QResizeEvent *e);
 
 protected:
