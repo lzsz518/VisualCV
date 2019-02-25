@@ -30,7 +30,8 @@ signals:
     void ParameterChange(const CommandParameter *para);
     void PanelOk(const CommandParameter *para);
     void PanelCancel(const CommandParameter *para);
-
+    void PanelShow(QControlPanel *panel);
+    void PanelClose(QControlPanel *panel);
 protected:
     CommandParameter *command_para;
     virtual void GetAllParameter();
@@ -53,6 +54,10 @@ private:
     QGridLayout *radiobutton_layout;
 
     VCV_IMAGE_OPERATION image_operation;
+
+private:
+    void showEvent(QShowEvent *event);
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // CONTROLPANEL_H

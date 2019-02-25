@@ -141,6 +141,20 @@ void QVCVMainWindow::WindowActive(QMdiSubWindow *subwin)
     edit_menu->clear();
     edit_menu->addAction(current_data->GetUndoAction());
     edit_menu->addAction(current_data->GetRedoAction());
+
+    QVCVChildWindow *childWindow = (QVCVChildWindow*)subwin->widget();
+    if(childWindow!=nullptr)
+    {
+        if(childWindow->IsAnyPanelShowed())
+            SetMenuStatus(false);
+        else
+            SetMenuStatus(true);
+
+    }
+    else
+    {
+        SetMenuStatus(true);
+    }
 }
 
 void QVCVMainWindow::New()
@@ -302,6 +316,9 @@ void QVCVMainWindow::ShowFilterPanel(VCV_IMAGE_OPERATION operation)
     if(filterpanel!=nullptr)
     {
         filterpanel->show();
+        SetMenuStatus(false);
+        connect(filterpanel,SIGNAL(PanelShow(QControlPanel*)),this,SLOT(slotPanelShow(QControlPanel*)));
+        connect(filterpanel,SIGNAL(PanelClose(QControlPanel*)),this,SLOT(slotPanelClose(QControlPanel*)));
     }
 }
 
@@ -312,7 +329,12 @@ void QVCVMainWindow::ShowThresholdPanel(VCV_IMAGE_OPERATION operation)
 
     QThresholdPanel *thresholdpanel = ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->GetThresholdPanel(operation);
     if(thresholdpanel!=nullptr)
+    {
         thresholdpanel->show();
+        SetMenuStatus(false);
+        connect(thresholdpanel,SIGNAL(PanelShow(QControlPanel*)),this,SLOT(slotPanelShow(QControlPanel*)));
+        connect(thresholdpanel,SIGNAL(PanelClose(QControlPanel*)),this,SLOT(slotPanelClose(QControlPanel*)));
+    }
 }
 
 void QVCVMainWindow::ShowMorphologicalPanel(VCV_IMAGE_OPERATION operation)
@@ -322,7 +344,12 @@ void QVCVMainWindow::ShowMorphologicalPanel(VCV_IMAGE_OPERATION operation)
     QMorphologyPanel *moph_panel = ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->GetMorphologyPanel(operation);
 
     if(moph_panel!=nullptr)
+    {
         moph_panel->show();
+        SetMenuStatus(false);
+        connect(moph_panel,SIGNAL(PanelShow(QControlPanel*)),this,SLOT(slotPanelShow(QControlPanel*)));
+        connect(moph_panel,SIGNAL(PanelClose(QControlPanel*)),this,SLOT(slotPanelClose(QControlPanel*)));
+    }
 }
 
 void QVCVMainWindow::ShowEdgeDetectionPanel(VCV_IMAGE_OPERATION operation)
@@ -331,7 +358,12 @@ void QVCVMainWindow::ShowEdgeDetectionPanel(VCV_IMAGE_OPERATION operation)
         return;
     QEdgeDetectionPanel *edge_panel = ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->GetEdgeDetectionPanel(operation);
     if(edge_panel!=nullptr)
+    {
         edge_panel->show();
+        SetMenuStatus(false);
+        connect(edge_panel,SIGNAL(PanelShow(QControlPanel*)),this,SLOT(slotPanelShow(QControlPanel*)));
+        connect(edge_panel,SIGNAL(PanelClose(QControlPanel*)),this,SLOT(slotPanelClose(QControlPanel*)));
+    }
 }
 
 void QVCVMainWindow::CreateConnection()
@@ -341,7 +373,7 @@ void QVCVMainWindow::CreateConnection()
     connect(file_menu_saveas,SIGNAL(triggered()),this,SLOT(Saveas()));
 
 
-//    connect(mdi_area,SIGNAL(subWindowActivated(QMdiSubWindow*)),this,SLOT(WindowActive(QMdiSubWindow*)));
+    connect(mdi_area,SIGNAL(subWindowActivated(QMdiSubWindow*)),this,SLOT(WindowActive(QMdiSubWindow*)));
 
     connect(filter_blur,SIGNAL(triggered()),this,SLOT(BlurFilter()));
     connect(filter_gaussian,SIGNAL(triggered()),this,SLOT(GaussianBlurFilter()));
@@ -371,4 +403,26 @@ void QVCVMainWindow::slotAboutDialog()
 {
     AboutDialog about;
     about.exec();
+}
+
+void QVCVMainWindow::slotPanelShow(QControlPanel *panel)
+{
+    SetMenuStatus(false);
+}
+
+void QVCVMainWindow::slotPanelClose(QControlPanel *panel)
+{
+    SetMenuStatus(true);
+    disconnect(panel,SIGNAL(PanelShow(QControlPanel*)),this,SLOT(slotPanelShow(QControlPanel*)));
+    disconnect(panel,SIGNAL(PanelClose(QControlPanel*)),this,SLOT(slotPanelClose(QControlPanel*)));
+}
+
+void QVCVMainWindow::SetMenuStatus(const bool flag)
+{
+    if(filter_menu!=nullptr)
+        filter_menu->setEnabled(flag);
+    if(morphological_menu!=nullptr)
+        morphological_menu->setEnabled(flag);
+    if(edge_menu!=nullptr)
+        edge_menu->setEnabled(flag);
 }

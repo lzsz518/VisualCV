@@ -193,6 +193,38 @@ QEdgeDetectionPanel* QVCVChildWindow::GetEdgeDetectionPanel(VCV_IMAGE_OPERATION 
     return edgedetection_panel;
 }
 
+bool QVCVChildWindow::IsAnyPanelShowed()
+{
+    if(filter_panel!=nullptr)
+    {
+        if(filter_panel->isVisible())
+            return true;
+    }
+
+    if(customfilter_panel!=nullptr)
+    {
+        if(customfilter_panel->isVisible())
+            return true;
+    }
+    if(threshold_panel!=nullptr)
+    {
+        if(threshold_panel->isVisible())
+            return true;
+    }
+    if(morphology_panel!=nullptr)
+    {
+        if(morphology_panel->isVisible())
+            return true;
+    }
+    if(edgedetection_panel!=nullptr)
+    {
+        if(edgedetection_panel->isVisible())
+            return true;
+    }
+
+    return false;
+}
+
 /////////////////////
 //slot function
 void QVCVChildWindow::FilterParameterChangeRespond(const CommandParameter *para)

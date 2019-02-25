@@ -10,6 +10,7 @@ class QMdiArea;
 class QSplitter;
 class QVCVData;
 class QTabWidget;
+class QControlPanel;
 class QFilterPanel;
 class QDockWidget;
 class QMdiSubWindow;
@@ -55,6 +56,9 @@ private slots:
 	void NormalSize();
 
     void slotAboutDialog();
+
+    void slotPanelShow(QControlPanel *panel);
+    void slotPanelClose(QControlPanel *panel);
 private:
 	QMenu *file_menu;
 	QMenu *view_menu;
@@ -109,6 +113,9 @@ private:
     void ShowThresholdPanel(VCV_IMAGE_OPERATION operation);
     void ShowMorphologicalPanel(VCV_IMAGE_OPERATION operation);
     void ShowEdgeDetectionPanel(VCV_IMAGE_OPERATION operation);
+
+
+    void SetMenuStatus(const bool flag);
 };
 
 #endif

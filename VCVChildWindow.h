@@ -38,6 +38,7 @@ public:
     QThresholdPanel* GetThresholdPanel(VCV_IMAGE_OPERATION operation);
     QMorphologyPanel* GetMorphologyPanel(VCV_IMAGE_OPERATION operation);
     QEdgeDetectionPanel* GetEdgeDetectionPanel(VCV_IMAGE_OPERATION operation);
+    bool IsAnyPanelShowed();
 public slots:
     void FilterParameterChangeRespond(const CommandParameter *para);
     void FilterPanelOk(const CommandParameter *para);
@@ -98,6 +99,7 @@ protected:
     void PanelValueChange(QVCVUndoCommand *command, const CommandParameter *para);
     void PanelOk(QVCVUndoCommand **command, const CommandParameter *para);
     void PanelCencel(QVCVUndoCommand **command, const CommandParameter *para);
+
 };
 
 #endif
