@@ -7,8 +7,9 @@
 class QMenu;
 class QAction;
 class QMdiArea;
-class QSplitter;
 class QVCVData;
+class QSplitter;
+class QUndoView;
 class QTabWidget;
 class QControlPanel;
 class QFilterPanel;
@@ -19,12 +20,11 @@ class QCommandBuilder;
 class QVCVUndoCommand;
 
 
-
 class QVCVMainWindow : public QMainWindow
 {
 	Q_OBJECT
 public:
-	QVCVMainWindow(QWidget *parent = 0, Qt::WindowFlags f= 0);
+    QVCVMainWindow(QWidget *parent = nullptr, Qt::WindowFlags f= Qt::Widget);
 	~QVCVMainWindow();
 
 private:
@@ -59,10 +59,13 @@ private slots:
 
     void slotPanelShow(QControlPanel *panel);
     void slotPanelClose(QControlPanel *panel);
+
+    void slotShowUndoView();
 private:
 	QMenu *file_menu;
 	QMenu *view_menu;
 	QMenu *edit_menu;
+    QMenu *window_menu;
 	QMenu *help_menu;
 
 	QMenu *filter_menu;
@@ -98,15 +101,19 @@ private:
 
     QAction *about;
 
+    QAction *undoviewShow;
+
 	QMdiArea *mdi_area;
 
 	QTabWidget *tabwidget;
+    QUndoView *undoview;
     QDockWidget *dockwidget;
     VCV_IMAGE_OPERATION image_operation;
 
 	void InitUI();
 	void CreateAction();
 	void CreateMenu();
+    void CreateUndoView();
 	void CreateConnection();
 
     void ShowFilterPanel(VCV_IMAGE_OPERATION operation);

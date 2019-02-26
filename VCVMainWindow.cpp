@@ -6,6 +6,7 @@
 #include <QStatusBar>
 #include <QFileDialog>
 #include <QTabWidget>
+#include <QUndoView>
 #include <QDockWidget>
 #include <QHBoxLayout>
 #include <QMessageBox>
@@ -32,6 +33,7 @@
 QVCVMainWindow::QVCVMainWindow(QWidget *parent , Qt::WindowFlags f)
         :QMainWindow(parent,f)
 {
+    dockwidget = nullptr;
     InitUI();
 
     setMinimumSize(800,600);
@@ -53,6 +55,7 @@ void QVCVMainWindow::InitUI()
 {
     CreateAction();
     CreateMenu();
+    CreateUndoView();
 
     QLabel *label1 = new QLabel(tr("OK"));
     statusBar()->addWidget(label1);
@@ -88,6 +91,8 @@ void QVCVMainWindow::CreateAction()
     edge_canny = new QAction(tr("Canny"),this);
 
     about = new QAction(tr("About"),this);
+
+    undoviewShow = new QAction(tr("UndoVeiw"),this);
 }
 
 void QVCVMainWindow::CreateMenu()
@@ -98,6 +103,7 @@ void QVCVMainWindow::CreateMenu()
     filter_menu =  menuBar()->addMenu(tr("&Filter"));
     morphological_menu = menuBar()->addMenu(tr("Morphological"));
     edge_menu = menuBar()->addMenu(tr("EdgeDetection"));
+    window_menu = menuBar()->addMenu(tr("&Window"));
     help_menu = menuBar()->addMenu(tr("&Help"));
 
     file_menu->addAction(file_menu_new);
@@ -127,6 +133,16 @@ void QVCVMainWindow::CreateMenu()
     edge_menu->addAction(edge_canny);
 
     help_menu->addAction(about);
+    window_menu->addAction(undoviewShow);
+}
+
+void QVCVMainWindow::CreateUndoView()
+{
+    dockwidget = new QDockWidget("UndoView",this);
+    undoview = new QUndoView;
+    dockwidget->setWidget(undoview);
+    dockwidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    addDockWidget(Qt::LeftDockWidgetArea,dockwidget);
 }
 
 void QVCVMainWindow::WindowActive(QMdiSubWindow *subwin)
@@ -397,6 +413,7 @@ void QVCVMainWindow::CreateConnection()
     connect(view_cascade,SIGNAL(triggered()),mdi_area,SLOT(cascadeSubWindows()));
 
     connect(about,SIGNAL(triggered(bool)),this,SLOT(slotAboutDialog()));
+    connect(undoviewShow,SIGNAL(triggered(bool)),this,SLOT(slotShowUndoView()));
 }
 
 void QVCVMainWindow::slotAboutDialog()
@@ -415,6 +432,18 @@ void QVCVMainWindow::slotPanelClose(QControlPanel *panel)
     SetMenuStatus(true);
     disconnect(panel,SIGNAL(PanelShow(QControlPanel*)),this,SLOT(slotPanelShow(QControlPanel*)));
     disconnect(panel,SIGNAL(PanelClose(QControlPanel*)),this,SLOT(slotPanelClose(QControlPanel*)));
+}
+
+void QVCVMainWindow::slotShowUndoView()
+{
+    if(dockwidget!=nullptr)
+    {
+        dockwidget->show();
+        addDockWidget(Qt::LeftDockWidgetArea,dockwidget);
+    }
+    else {
+        CreateUndoView();
+    }
 }
 
 void QVCVMainWindow::SetMenuStatus(const bool flag)
