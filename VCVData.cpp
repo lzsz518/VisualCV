@@ -1,3 +1,4 @@
+#include <QUndoview>
 #include <QUndoStack>
 #include <QAction>
 #include "opencv2/highgui.hpp"
@@ -102,6 +103,12 @@ void QVCVData::RegisterViewer(QVCVChildWindow *viewer)
 		data_viewer = viewer;
 }
 
+void QVCVData::RegisterViewer(QUndoView *viewer)
+{
+    if(viewer!=nullptr)
+        undo_viewer = viewer;
+}
+
 bool QVCVData::Initialize()
 {
     if((operation_undostack = new QUndoStack)==nullptr)
@@ -120,6 +127,9 @@ void QVCVData::Notify()
 {
 	if(!display_image.empty())
         data_viewer->Update(display_image);
+
+    if(operation_undostack!=nullptr)
+        undo_viewer->setStack(operation_undostack);
 }
 
 int QVCVData::width()

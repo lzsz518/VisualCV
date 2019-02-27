@@ -35,6 +35,25 @@ enum VCV_IMAGE_OPERATION
     IMAGE_EDGE_CANNY
 };
 
+const static string UndoCommandString[] = {
+    "None",
+    "New",
+    "Load",
+    "Filter_Blur",
+    "Filter_GaussianBlur",
+    "Filter_MedianBlur",
+    "Filter_Bilateral",
+    "Filter_Custom2D",
+    "Filter_Erosion",
+    "Filter_Dilation",
+    "Morphology",
+    "Threshold",
+    "Adaptive",
+    "Edge_Laplacian",
+    "Edge_Sobel",
+    "Edge_Canny"
+};
+
 class CommandParameter
 {
 

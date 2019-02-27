@@ -171,6 +171,7 @@ void QVCVMainWindow::WindowActive(QMdiSubWindow *subwin)
     {
         SetMenuStatus(true);
     }
+    current_data->Notify();
 }
 
 void QVCVMainWindow::New()
@@ -199,6 +200,7 @@ void QVCVMainWindow::OpenFile()
         QMdiSubWindow *sub_win = new QMdiSubWindow;
         sub_win->setWidget(viewer);
         vcvdata->RegisterViewer(viewer);
+        vcvdata->RegisterViewer(undoview);
         vcvdata->Load(files.at(i));
         viewer->setWindowTitle(files.at(i));
         mdi_area->addSubWindow(sub_win);
@@ -224,7 +226,7 @@ void QVCVMainWindow::Saveas()
                                         tr("Open Image"), "/home", tr("Image Files(*.jpg);;Image Files(*.png);;Image Files(*.bmp)"));
 
     if(!QDataModelInstance::Instance()->GetData(mdi_area->activeSubWindow()->windowTitle().toStdString().c_str())->SaveAs(file))
-        QMessageBox::information(NULL,tr("Information"),tr("Write file to headdisk fail !"));
+        QMessageBox::information(nullptr,tr("Information"),tr("Write file to headdisk fail !"));
 }
 
 void QVCVMainWindow::BlurFilter()
@@ -249,12 +251,12 @@ void QVCVMainWindow::BilateralFilter()
 
 void QVCVMainWindow::CustomFilter2D()
 {
-    if(mdi_area->activeSubWindow()==NULL)
+    if(mdi_area->activeSubWindow()==nullptr)
         return;
 
     QCustomFilterDlg *customfilterpanel = ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->GetCustomFilterPanel();
 
-    if(customfilterpanel!=NULL)
+    if(customfilterpanel!=nullptr)
     {
         customfilterpanel->Initialize(QDataModelInstance::Instance()->GetData(mdi_area->activeSubWindow()->windowTitle().toStdString().c_str())->GetDisplayImage());
         customfilterpanel->show();

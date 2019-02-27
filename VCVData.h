@@ -11,8 +11,9 @@
 
 class QAction;
 class QUndoStack;
-class QVCVUndoCommand;
+class QUndoView;
 class QVCVChildWindow;
+class QVCVUndoCommand;
 
 class QVCVData : public QObject
 {
@@ -30,6 +31,7 @@ public:
 	void Notify();
 
 	void RegisterViewer(QVCVChildWindow *viewer);
+    void RegisterViewer(QUndoView *viewer);
     bool New(int width,int height,int type , int resolution,const Scalar& s = Scalar(1,1,1,1));
 	bool Load(const QString &file_name);
 	bool Save();
@@ -68,6 +70,7 @@ protected:
 	QUndoStack *operation_undostack;
 
 	QVCVChildWindow *data_viewer;
+    QUndoView *undo_viewer;
 };
 
 #endif

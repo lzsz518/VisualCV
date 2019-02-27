@@ -118,7 +118,8 @@ QFilterPanel* QVCVChildWindow::GetFilterPanel(VCV_IMAGE_OPERATION operation)
     }
 
     DoOperation((QControlPanel*)filter_panel,(QVCVUndoCommand**)&filter_command,operation);
-
+    if(filter_command!=nullptr)
+        filter_command->setText(UndoCommandString[operation].c_str());
     return filter_panel;
 }
 
@@ -135,6 +136,8 @@ QCustomFilterDlg* QVCVChildWindow::GetCustomFilterPanel()
     }
 
     DoOperation((QControlPanel*)customfilter_panel,(QVCVUndoCommand**)&custom_filter_command,IMAGE_FILTER_CUSTOM2D);
+    if(custom_filter_command!=nullptr)
+        custom_filter_command->setText(UndoCommandString[IMAGE_FILTER_CUSTOM2D].c_str());
 
     return customfilter_panel;
 }
@@ -153,6 +156,8 @@ QThresholdPanel* QVCVChildWindow::GetThresholdPanel(VCV_IMAGE_OPERATION operatio
     }
 
     DoOperation(threshold_panel,(QVCVUndoCommand**)&threshold_command,operation);
+    if(threshold_command!=nullptr)
+        threshold_command->setText(UndoCommandString[operation].c_str());
 
     return threshold_panel;
 }
@@ -171,6 +176,8 @@ QMorphologyPanel* QVCVChildWindow::GetMorphologyPanel(VCV_IMAGE_OPERATION operat
     }
 
     DoOperation(morphology_panel,(QVCVUndoCommand**)&morphology_command,operation);
+    if(morphology_command!=nullptr)
+        morphology_command->setText(UndoCommandString[operation].c_str());
 
     return morphology_panel;
 }
@@ -189,6 +196,8 @@ QEdgeDetectionPanel* QVCVChildWindow::GetEdgeDetectionPanel(VCV_IMAGE_OPERATION 
     }
 
     DoOperation(edgedetection_panel,(QVCVUndoCommand**)&edgedetection_command,operation);
+    if(edgedetection_command!=nullptr)
+        edgedetection_command->setText(UndoCommandString[operation].c_str());
 
     return edgedetection_panel;
 }
