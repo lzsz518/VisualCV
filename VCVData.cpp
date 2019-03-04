@@ -1,4 +1,4 @@
-#include <QUndoview>
+#include <QUndoView>
 #include <QUndoStack>
 #include <QAction>
 #include "opencv2/highgui.hpp"
