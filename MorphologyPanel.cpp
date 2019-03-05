@@ -53,74 +53,76 @@ void QMorphologyPanel::PushOk()
 {
     GetAllParameter();
     emit PanelOk(command_para);
+    close();
 }
 
 void QMorphologyPanel::PushCancel()
 {
     GetAllParameter();
     emit PanelCancel(command_para);
+    close();
 }
 
 void QMorphologyPanel::GetAllParameter()
 {
-    command_para->anchor.x = ui.sp_anchorx->value();
-    command_para->anchor.y = ui.sp_anchory->value();
-    command_para->borderType = GetBorderType();
-    command_para->iteration = ui.sp_iterations->value();
-    command_para->kernelAnchor.x = ui.sp_kernelanchorx->value();
-    command_para->kernelAnchor.y = ui.sp_kernelanchory->value();
-    command_para->ksize = ui.sp_kernelsize->value();
+    ((CommandParameter_Morphology*)command_para)->anchor.x = ui.sp_anchorx->value();
+    ((CommandParameter_Morphology*)command_para)->anchor.y = ui.sp_anchory->value();
+    ((CommandParameter_Morphology*)command_para)->borderType = GetBorderType();
+    ((CommandParameter_Morphology*)command_para)->iteration = ui.sp_iterations->value();
+    ((CommandParameter_Morphology*)command_para)->kernelAnchor.x = ui.sp_kernelanchorx->value();
+    ((CommandParameter_Morphology*)command_para)->kernelAnchor.y = ui.sp_kernelanchory->value();
+    ((CommandParameter_Morphology*)command_para)->ksize = ui.sp_kernelsize->value();
 
     switch(ui.cb_op->currentIndex())
     {
     case 0:
-        command_para->op = MORPH_ERODE;
+        ((CommandParameter_Morphology*)command_para)->op = MORPH_ERODE;
         break;
     case 1:
-        command_para->op = MORPH_DILATE;
+        ((CommandParameter_Morphology*)command_para)->op = MORPH_DILATE;
         break;
     case 2:
-        command_para->op = MORPH_OPEN;
+        ((CommandParameter_Morphology*)command_para)->op = MORPH_OPEN;
         break;
     case 3:
-        command_para->op = MORPH_CLOSE;
+        ((CommandParameter_Morphology*)command_para)->op = MORPH_CLOSE;
         break;
     case 4:
-        command_para->op = MORPH_GRADIENT;
+        ((CommandParameter_Morphology*)command_para)->op = MORPH_GRADIENT;
         break;
     case 5:
-        command_para->op = MORPH_TOPHAT;
+        ((CommandParameter_Morphology*)command_para)->op = MORPH_TOPHAT;
         break;
     case 6:
-        command_para->op = MORPH_BLACKHAT;
+        ((CommandParameter_Morphology*)command_para)->op = MORPH_BLACKHAT;
         break;
     case 7:
-        command_para->op = MORPH_HITMISS;
+        ((CommandParameter_Morphology*)command_para)->op = MORPH_HITMISS;
         break;
     default:
-        command_para->op = MORPH_ERODE;
+        ((CommandParameter_Morphology*)command_para)->op = MORPH_ERODE;
         break;
     }
 
     switch(ui.cb_morphshape->currentIndex())
     {
     case 0:
-        command_para->shape = MORPH_RECT;
+        ((CommandParameter_Morphology*)command_para)->shape = MORPH_RECT;
         break;
     case 1:
-        command_para->shape = MORPH_CROSS;
+        ((CommandParameter_Morphology*)command_para)->shape = MORPH_CROSS;
         break;
     case 2:
-        command_para->shape = MORPH_ELLIPSE;
+        ((CommandParameter_Morphology*)command_para)->shape = MORPH_ELLIPSE;
         break;
     default:
-        command_para->shape = MORPH_RECT;
+        ((CommandParameter_Morphology*)command_para)->shape = MORPH_RECT;
     }
 
-    command_para->tp1 = ui.sp_tp1->value();
-    command_para->tp2 = ui.sp_tp2->value();
-    command_para->tp3 = ui.sp_tp3->value();
-    command_para->tp4 = ui.sp_tp4->value();
+    ((CommandParameter_Morphology*)command_para)->tp1 = ui.sp_tp1->value();
+    ((CommandParameter_Morphology*)command_para)->tp2 = ui.sp_tp2->value();
+    ((CommandParameter_Morphology*)command_para)->tp3 = ui.sp_tp3->value();
+    ((CommandParameter_Morphology*)command_para)->tp4 = ui.sp_tp4->value();
 }
 
 void QMorphologyPanel::DisableAll()

@@ -65,6 +65,7 @@ void QControlPanel::PushOk()
 
     GetAllParameter();
     emit PanelOk(command_para);
+    close();
 }
 
 void QControlPanel::PushCancel()
@@ -72,6 +73,7 @@ void QControlPanel::PushCancel()
     EndOperation(GetOperation());
     GetAllParameter();
     emit PanelCancel(command_para);
+    close();
 }
 
 void QControlPanel::GetAllParameter()

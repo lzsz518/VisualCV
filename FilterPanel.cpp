@@ -171,27 +171,29 @@ void QFilterPanel::EndOperation(VCV_IMAGE_OPERATION operation)
 
 void QFilterPanel::ValueChange()
 {
-	GetAllParameter();
+    GetAllParameter();
 
-	emit ParameterChange(command_para);
+    emit ParameterChange(command_para);
 }
 
 void QFilterPanel::PushOk()
 {
     EndOperation(GetOperation());
 
-	GetAllParameter();
+    GetAllParameter();
 
     emit PanelOk(command_para);
+    close();
 }
 
 void QFilterPanel::PushCancel()
 {
     EndOperation(GetOperation());
 
-	GetAllParameter();
+    GetAllParameter();
 
     emit PanelCancel(command_para);
+    close();
 }
 
 void QFilterPanel::CreateBorderType()
@@ -223,15 +225,15 @@ void QFilterPanel::CreateBorderType()
 
 void QFilterPanel::GetAllParameter()
 {
-    command_para->delta = GetDelta();
-    command_para->iterations =GetIterations();
-    command_para->ksize = GetKSize();
-    command_para->point = GetPoint();
-    command_para->scale = GetScale();
-    command_para->sigmacolor = GetSigmaColor();
-    command_para->sigmaspace = GetSigmaSpace();
-    command_para->size = GetSize();
-    command_para->bordertype = GetBorderType();
+    ((CommandParameter_Filter*)command_para)->delta = GetDelta();
+    ((CommandParameter_Filter*)command_para)->iterations =GetIterations();
+    ((CommandParameter_Filter*)command_para)->ksize = GetKSize();
+    ((CommandParameter_Filter*)command_para)->point = GetPoint();
+    ((CommandParameter_Filter*)command_para)->scale = GetScale();
+    ((CommandParameter_Filter*)command_para)->sigmacolor = GetSigmaColor();
+    ((CommandParameter_Filter*)command_para)->sigmaspace = GetSigmaSpace();
+    ((CommandParameter_Filter*)command_para)->size = GetSize();
+    ((CommandParameter_Filter*)command_para)->bordertype = GetBorderType();
 }
 
 void QFilterPanel::Disable()

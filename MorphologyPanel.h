@@ -23,7 +23,6 @@ protected slots:
 
 protected:
     Ui_MorphologyPanel ui;
-    CommandParameter_Morphology *command_para;
 
     void DisableAll();
 };

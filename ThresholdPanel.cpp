@@ -70,6 +70,7 @@ void QThresholdPanel::PushOk()
     emit PanelOk(command_para);
 
     DisableAll();
+    close();
 }
 
 void QThresholdPanel::PushCancel()
@@ -79,6 +80,7 @@ void QThresholdPanel::PushCancel()
     emit PanelCancel(command_para);
 
     DisableAll();
+    close();
 }
 
 void QThresholdPanel::EnableThreshold()
@@ -127,31 +129,31 @@ void QThresholdPanel::GetAllParameter()
     if(command_para==NULL)
         return;
 
-    command_para->thresh = ui.dsp_thresh->value();
-    command_para->max = ui.dsp_max->value();
-    command_para->constant = ui.dsp_constant->value();
-    command_para->block_size = ui.sp_blocksize->value();
+    ((CommandParameter_Threshold*)command_para)->thresh = ui.dsp_thresh->value();
+    ((CommandParameter_Threshold*)command_para)->max = ui.dsp_max->value();
+    ((CommandParameter_Threshold*)command_para)->constant = ui.dsp_constant->value();
+    ((CommandParameter_Threshold*)command_para)->block_size = ui.sp_blocksize->value();
 
     if(ui.rb_binary->isChecked())
-        command_para->threshold_type = THRESH_BINARY;
+        ((CommandParameter_Threshold*)command_para)->threshold_type = THRESH_BINARY;
     if(ui.rb_binary_inv->isChecked())
-        command_para->threshold_type = THRESH_BINARY_INV;
+        ((CommandParameter_Threshold*)command_para)->threshold_type = THRESH_BINARY_INV;
     if(ui.rb_trunc->isChecked())
-        command_para->threshold_type = THRESH_TRUNC;
+        ((CommandParameter_Threshold*)command_para)->threshold_type = THRESH_TRUNC;
     if(ui.rb_tozero->isChecked())
-        command_para->threshold_type = THRESH_TOZERO;
+        ((CommandParameter_Threshold*)command_para)->threshold_type = THRESH_TOZERO;
     if(ui.rb_tozero_inv->isChecked())
-        command_para->threshold_type = THRESH_TOZERO_INV;
+        ((CommandParameter_Threshold*)command_para)->threshold_type = THRESH_TOZERO_INV;
     if(ui.rb_mask->isChecked())
-        command_para->threshold_type = THRESH_MASK;
+        ((CommandParameter_Threshold*)command_para)->threshold_type = THRESH_MASK;
     if(ui.rb_otsu->isChecked())
-        command_para->threshold_type = THRESH_OTSU;
+        ((CommandParameter_Threshold*)command_para)->threshold_type = THRESH_OTSU;
     if(ui.rb_triangle->isChecked())
-        command_para->threshold_type = THRESH_TRIANGLE;
+        ((CommandParameter_Threshold*)command_para)->threshold_type = THRESH_TRIANGLE;
     if(ui.rb_mean_c->isChecked())
-        command_para->adaptive_type = ADAPTIVE_THRESH_MEAN_C;
+        ((CommandParameter_Threshold*)command_para)->adaptive_type = ADAPTIVE_THRESH_MEAN_C;
     if(ui.rb_gaussian_c->isChecked())
-        command_para->adaptive_type = ADAPTIVE_THRESH_GAUSSIAN_C;
+        ((CommandParameter_Threshold*)command_para)->adaptive_type = ADAPTIVE_THRESH_GAUSSIAN_C;
 }
 
 ThresholdTypes QThresholdPanel::GetThresholdType()

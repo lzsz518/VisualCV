@@ -24,7 +24,7 @@ QImage* MatToQImage(const Mat &mat)
 		dst = mat.clone();
 		break;
 	default:
-		return NULL;
+        return nullptr;
 	}
 
 	QImage *result = new QImage(dst.cols,dst.rows,QImage::Format_ARGB32);
@@ -35,5 +35,5 @@ QImage* MatToQImage(const Mat &mat)
 
 Mat* QImageToMat(QImage &image)
 {
-	return NULL;
+    return nullptr;
 }

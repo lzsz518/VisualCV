@@ -53,7 +53,6 @@ private:
 
     //VCV_IMAGE_OPERATION image_operation;
 
-    CommandParameter_Filter *command_para;
 	void CreateBorderType();
     virtual void GetAllParameter();
 

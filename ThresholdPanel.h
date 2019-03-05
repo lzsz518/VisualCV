@@ -28,7 +28,6 @@ private slots:
 protected:
     Ui_Threshold ui;
    // VCV_IMAGE_OPERATION image_operation;
-    CommandParameter_Threshold *command_para;
 
     void EnableThreshold();
     void EnableAdaptive();
