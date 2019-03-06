@@ -1,42 +1,34 @@
 #include "opencv2/imgproc.hpp"
 #include "VCVData.h"
-#include "CommandInclude/BlurFilter.h"
+#include "Command/GaussianBlurFilter.h"
 
-using namespace cv;
-
-QBlurFilter::QBlurFilter()
+GaussianBlurFilter::GaussianBlurFilter()
 {
-	initialization = false;
+	//initialization = false;
 }
 
-QBlurFilter::~QBlurFilter()
+GaussianBlurFilter::~GaussianBlurFilter()
 {
-	original_image.release();
-	final_image.release();
+
 }
 
-bool QBlurFilter::SetParameter(const CommandParameter *para)
+bool GaussianBlurFilter::SetParameter(const CommandParameter *para)
 {
     if(para==NULL)
         return false;
     CommandParameter_Filter *filter_para = (CommandParameter_Filter*)para;
-
-    if(filter_para->size.width!=filter_para->size.height)
+    if((filter_para->size.width%2==0)||(filter_para->size.height%2==0))
 		return false;
 
     size = filter_para->size;
-    anchor = filter_para->point;
+    sigma_x = filter_para->sigmacolor;
+    sigma_y = filter_para->sigmaspace;
     border_type = filter_para->bordertype;
-
-	if(anchor.x>=size.width)
-		anchor.x = size.width-1;
-	if(anchor.y>=size.height)
-		anchor.y = size.height-1;
 
 	return true;
 }
 
-void QBlurFilter::undo()
+void GaussianBlurFilter::undo()
 {
 	if(!initialization)
 		return;
@@ -44,15 +36,19 @@ void QBlurFilter::undo()
 	connection_data->SetDisplayImage(original_image);
 }
 
-void QBlurFilter::redo()
+void GaussianBlurFilter::redo()
 {
 	if(!initialization)
 		return;
 
 	final_image.release();
 	final_image.create(original_image.rows,original_image.cols,original_image.type());
-
-	blur(original_image,final_image,size,anchor,border_type);
+	GaussianBlur(original_image,final_image,size,sigma_x,sigma_y,border_type);
 
 	connection_data->SetDisplayImage(final_image);
 }
+
+
+
+
+

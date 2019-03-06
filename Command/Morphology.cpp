@@ -1,6 +1,6 @@
 #include "VCVData.h"
 #include "SystemDefine.h"
-#include "CommandInclude/Morphology.h"
+#include "Command/Morphology.h"
 
 QMorphology::QMorphology()
 {

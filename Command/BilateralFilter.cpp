@@ -1,6 +1,6 @@
 #include "opencv2/imgproc.hpp"
 #include "VCVData.h"
-#include "CommandInclude/BilateralFilter.h"
+#include "Command/BilateralFilter.h"
 
 QBilateralFilter::QBilateralFilter()
 {

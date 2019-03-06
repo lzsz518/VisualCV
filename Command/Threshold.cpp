@@ -1,6 +1,6 @@
 #include "VCVData.h"
 #include "SystemDefine.h"
-#include "CommandInclude/Threshold.h"
+#include "Command/Threshold.h"
 
 QThreshold::QThreshold()
 {

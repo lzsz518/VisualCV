@@ -1,5 +1,5 @@
 #include "VCVData.h"
-#include "CommandInclude/ImageProcCommand.h"
+#include "Command/ImageProcCommand.h"
 
 QImageProcCommand::QImageProcCommand()
 {

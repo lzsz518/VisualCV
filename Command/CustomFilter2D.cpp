@@ -1,6 +1,6 @@
 #include "opencv2/imgproc.hpp"
 #include "VCVData.h"
-#include "CommandInclude/CustomFilter2D.h"
+#include "Command/CustomFilter2D.h"
 
 QCustomFilter2D::QCustomFilter2D()
 {

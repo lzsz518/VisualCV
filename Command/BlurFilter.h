@@ -2,7 +2,7 @@
 #define OPENCOMMAND_H
 
 #include "SystemDefine.h"
-#include "CommandInclude/ImageProcCommand.h"
+#include "Command/ImageProcCommand.h"
 
 
 class QBlurFilter : public QImageProcCommand

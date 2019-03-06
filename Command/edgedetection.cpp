@@ -1,7 +1,7 @@
 #include "opencv2/imgproc.hpp"
 #include "VCVData.h"
 #include "SystemDefine.h"
-#include "CommandInclude/edgedetection.h"
+#include "Command/edgedetection.h"
 
 QLaplaction::QLaplaction()
 {

@@ -1,16 +1,16 @@
-#include "CommandInclude/VCVUndoCommand.h"
-#include "CommandInclude/BlurFilter.h"
-#include "CommandInclude/GaussianBlurFilter.h"
-#include "CommandInclude/MedianBlurFilter.h"
-#include "CommandInclude/BilateralFilter.h"
-#include "CommandInclude/CustomFilter2D.h"
-#include "CommandInclude/Erosion.h"
-#include "CommandInclude/Dilation.h"
-#include "CommandInclude/Threshold.h"
-#include "CommandInclude/Morphology.h"
-#include "CommandInclude/edgedetection.h"
+#include "Command/VCVUndoCommand.h"
+#include "Command/BlurFilter.h"
+#include "Command/GaussianBlurFilter.h"
+#include "Command/MedianBlurFilter.h"
+#include "Command/BilateralFilter.h"
+#include "Command/CustomFilter2D.h"
+#include "Command/Erosion.h"
+#include "Command/Dilation.h"
+#include "Command/Threshold.h"
+#include "Command/Morphology.h"
+#include "Command/edgedetection.h"
 
-#include "CommandInclude/CommandBuilder.h"
+#include "Command/CommandBuilder.h"
 
 
 QCommandBuilder::QCommandBuilder()

@@ -1,14 +1,14 @@
-#ifndef EROSION_H
-#define EROSION_H
+#ifndef DILATION_H
+#define DILATION_H
 
 #include "SystemDefine.h"
-#include "CommandInclude/ImageProcCommand.h"
+#include "Command/ImageProcCommand.h"
 
-class QErosion : public QImageProcCommand
+class QDilation : public QImageProcCommand
 {
 public:
-	QErosion();
-	~QErosion();
+	QDilation();
+	~QDilation();
 
     virtual bool SetParameter(const CommandParameter *para);
 

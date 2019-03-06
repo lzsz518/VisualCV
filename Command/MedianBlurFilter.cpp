@@ -1,6 +1,6 @@
 #include "opencv2/imgproc.hpp"
 #include "VCVData.h"
-#include "CommandInclude/MedianBlurFilter.h"
+#include "Command/MedianBlurFilter.h"
 
 QMedianBlurFilter::QMedianBlurFilter()
 {

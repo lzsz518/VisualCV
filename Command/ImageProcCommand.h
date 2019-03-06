@@ -2,7 +2,7 @@
 #define IMAGEPROCCOMMAND_H
 
 #include "SystemDefine.h"
-#include "CommandInclude/VCVUndoCommand.h"
+#include "Command/VCVUndoCommand.h"
 
 class QVCVData;
 

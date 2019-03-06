@@ -1,6 +1,6 @@
 #include "SystemDefine.h"
 
-#include "CommandInclude/VCVUndoCommand.h"
+#include "Command/VCVUndoCommand.h"
 
 QVCVUndoCommand::QVCVUndoCommand()
 {

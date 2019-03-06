@@ -24,9 +24,9 @@
 #include "NewDialog.h"
 #include "AboutDialog.h"
 
-#include "CommandInclude/CommandBuilder.h"
-#include "CommandInclude/VCVUndoCommand.h"
-#include "CommandInclude/CustomFilter2D.h"
+#include "Command/CommandBuilder.h"
+#include "Command/VCVUndoCommand.h"
+#include "Command/CustomFilter2D.h"
 
 #include "VCVMainWindow.h"
 

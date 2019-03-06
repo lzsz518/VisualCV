@@ -1,5 +1,5 @@
 #include <QRadioButton>
-#include "CommandInclude/BlurFilter.h"
+#include "Command/BlurFilter.h"
 
 #include "FilterPanel.h"
 

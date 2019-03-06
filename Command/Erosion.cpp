@@ -1,23 +1,22 @@
 #include "opencv2/imgproc.hpp"
 #include "VCVData.h"
-#include "CommandInclude/Dilation.h"
+#include "Command/Erosion.h"
 
-QDilation::QDilation()
+QErosion::QErosion()
 {
 
 }
 
-QDilation::~QDilation()
+QErosion::~QErosion()
 {
 
 }
 
-bool QDilation::SetParameter(const CommandParameter *para)
+bool QErosion::SetParameter(const CommandParameter *para)
 {
     if(para==NULL)
         return false;
     CommandParameter_Filter *filter_para = (CommandParameter_Filter*)para;
-
     if(filter_para->iterations%2!=1)
 		return false;
 
@@ -27,7 +26,7 @@ bool QDilation::SetParameter(const CommandParameter *para)
 	return true;
 }
 
-void QDilation::undo()
+void QErosion::undo()
 {
 	if(!initialization)
 		return;
@@ -35,7 +34,7 @@ void QDilation::undo()
 	connection_data->SetDisplayImage(original_image);	
 }
 
-void QDilation::redo()
+void QErosion::redo()
 {
 	if(!initialization)
 		return;
@@ -48,9 +47,9 @@ void QDilation::redo()
 	final_image.release();
 	final_image.create(original_image.rows,original_image.cols,original_image.type());
 	
-	Mat kernel = getStructuringElement(MORPH_ELLIPSE,Size(iterations, iterations),anchor);
+	Mat kernel = getStructuringElement(MORPH_ELLIPSE,Size(iterations, iterations),anchor );
 
-	dilate(original_image,final_image,kernel,anchor,iterations);
+	erode(original_image,final_image,kernel,anchor,iterations);
 
 	connection_data->SetDisplayImage(final_image);
 }

@@ -2,7 +2,7 @@
 #define GAUSSIANBLURFILTER_H
 
 #include "SystemDefine.h"
-#include "CommandInclude/ImageProcCommand.h"
+#include "Command/ImageProcCommand.h"
 
 class GaussianBlurFilter : public QImageProcCommand
 {

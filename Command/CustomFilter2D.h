@@ -2,7 +2,7 @@
 #define CUSTOMFILTER2D_H
 
 #include "SystemDefine.h"
-#include "CommandInclude/ImageProcCommand.h"
+#include "Command/ImageProcCommand.h"
 
 
 class QCustomFilter2D : public QImageProcCommand

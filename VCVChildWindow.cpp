@@ -10,10 +10,10 @@
 #include "VCVData.h"
 #include "VCVDataModel.h"
 #include "DataModelInstance.h"
-#include "CommandInclude/CommandBuilder.h"
-#include "CommandInclude/VCVUndoCommand.h"
-#include "CommandInclude/ImageProcCommand.h"
-#include "CommandInclude/Threshold.h"
+#include "Command/CommandBuilder.h"
+#include "Command/VCVUndoCommand.h"
+#include "Command/ImageProcCommand.h"
+#include "Command/Threshold.h"
 #include "VCVChildWindow.h"
 
 QVCVChildWindow::QVCVChildWindow(QWidget *parent, Qt::WindowFlags f)
