@@ -50,16 +50,15 @@ signals:
 public slots:
 
 public:
-    virtual void MousePressEvent(QMouseEvent *event,QPaintDevice *device);
-    virtual void MouseMoveEvent(QMouseEvent *event,QPaintDevice *device);
-    virtual void MouseReleseEvent(QMouseEvent *event,QPaintDevice *device);
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void MousePressEvent(QMouseEvent *event)=0;
+    virtual void MouseMoveEvent(QMouseEvent *event);
+    virtual void MouseReleseEvent(QMouseEvent *event);
+    virtual void draw(QPainter *painter);
 
     virtual QVCVMouseEventData* GetData();
     void InitializeData(QVCVMouseEventData *d);
 protected:
     QVCVMouseEventData *mouse_data;
-    QPaintDevice *client_device;
 };
 
 class QVCVMouseEvent_Line : public QVCVMouseEvent
@@ -69,10 +68,10 @@ public:
     QVCVMouseEvent_Line();
     ~QVCVMouseEvent_Line();
 public:
-    virtual void MousePressEvent(QMouseEvent *event, QPaintDevice *device);
-    virtual void MouseMoveEvent(QMouseEvent *event, QPaintDevice *device);
-    virtual void MouseReleaseEvent(QMouseEvent *event, QPaintDevice *device);
-    virtual void paintEvent(QPaintEvent *event);
+    virtual void MousePressEvent(QMouseEvent *event);
+    virtual void MouseMoveEvent(QMouseEvent *event);
+    virtual void MouseReleaseEvent(QMouseEvent *event);
+    virtual void draw(QPainter *painter);
 };
 
 #endif // QVCVMOUSEEVENT_H

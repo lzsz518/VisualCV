@@ -407,7 +407,8 @@ void QVCVChildWindow::mousePressEvent(QMouseEvent *event)
     {
         left_button_down = true;
         mouse_event = new QVCVMouseEvent_Line;
-        mouse_event->MousePressEvent(event,this);
+        QPainter painter(this);
+        mouse_event->MousePressEvent(event,&painter);
     }
 
 }
@@ -415,7 +416,8 @@ void QVCVChildWindow::mouseMoveEvent(QMouseEvent *event)
 {
     if(left_button_down)
     {
-        mouse_event->MouseMoveEvent(event,this);
+        QPainter painter(this);
+        mouse_event->MouseMoveEvent(event,&painter);
         update();
     }
 }
@@ -423,7 +425,8 @@ void QVCVChildWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     if(left_button_down)
     {
-        mouse_event->MouseReleseEvent(event,this);
+        QPainter painter(this);
+        mouse_event->MouseReleseEvent(event,&painter);
         delete mouse_event;
         mouse_event = nullptr;
         left_button_down = false;
@@ -517,8 +520,11 @@ void QVCVChildWindow::DrawClient()
     }
 
     painter.drawImage(widget_display_area,*update_image,image_display_area);
-    painter.setPen(Qt::blue);
-    painter.drawLine(QPoint(0,0),QPoint(100,100));
+
+    if(left_button_down)
+    {
+        mouse_event->draw(&painter);
+    }
 }
 
 void QVCVChildWindow::DoOperation(QControlPanel *panel,QVCVUndoCommand **command, VCV_IMAGE_OPERATION operation)

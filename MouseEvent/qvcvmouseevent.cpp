@@ -12,22 +12,22 @@ QVCVMouseEvent::~QVCVMouseEvent()
 
 }
 
-void QVCVMouseEvent::MousePressEvent(QMouseEvent *event,QPaintDevice *device)
+void QVCVMouseEvent::MousePressEvent(QMouseEvent *event)
 {
 
 }
 
-void QVCVMouseEvent::MouseMoveEvent(QMouseEvent *event,QPaintDevice *device)
+void QVCVMouseEvent::MouseMoveEvent(QMouseEvent *event)
 {
 
 }
 
-void QVCVMouseEvent::MouseReleseEvent(QMouseEvent *event,QPaintDevice *device)
+void QVCVMouseEvent::MouseReleseEvent(QMouseEvent *event)
 {
 
 }
 
-void QVCVMouseEvent::paintEvent(QPaintEvent *event)
+void QVCVMouseEvent::draw(QPainter *painter)
 {
 
 }
@@ -52,40 +52,38 @@ QVCVMouseEvent_Line::~QVCVMouseEvent_Line()
 
 }
 
-void QVCVMouseEvent_Line::MousePressEvent(QMouseEvent *event, QPaintDevice *device)
+void QVCVMouseEvent_Line::MousePressEvent(QMouseEvent *event)
 {
     QVCVMouseEventData_Line *data = (QVCVMouseEventData_Line*)this->GetData();
     if(data!=nullptr)
     {
         data->SetPoint1(event->pos());
         data->SetPoint2(event->pos());
-        client_device = device;
     }
 }
 
-void QVCVMouseEvent_Line::MouseMoveEvent(QMouseEvent *event, QPaintDevice *device)
+void QVCVMouseEvent_Line::MouseMoveEvent(QMouseEvent *event)
 {
     QVCVMouseEventData_Line *data = (QVCVMouseEventData_Line*)GetData();
-    if(data!=nullptr && device!=nullptr)
+    if(data!=nullptr)
     {
         data->SetPoint2(event->pos());
-        repaint();
     }
 }
 
-void QVCVMouseEvent_Line::MouseReleaseEvent(QMouseEvent *event, QPaintDevice *device)
+void QVCVMouseEvent_Line::MouseReleaseEvent(QMouseEvent *event)
 {
     QVCVMouseEventData_Line *data = (QVCVMouseEventData_Line*)this->GetData();
     if(data!=nullptr)
         data->SetPoint2(event->pos());
 }
 
-void QVCVMouseEvent_Line::paintEvent(QPaintEvent *event)
+void QVCVMouseEvent_Line::draw(QPainter *painter)
 {
+    if(painter==nullptr)
+        return;
+
     QVCVMouseEventData_Line *data = (QVCVMouseEventData_Line*)this->GetData();
-    QPainter painter(client_device);
-    painter.begin(client_device);
-    painter.setPen(QColor(0,255,255));
-    painter.drawLine(data->GetPoint1(),data->GetPoint2());
-    painter.end();
+    painter->setPen(QColor(0,255,255));
+    painter->drawLine(data->GetPoint1(),data->GetPoint2());
 }
