@@ -1,3 +1,4 @@
+#include <QMouseEvent>
 #include <QImage>
 #include <QPainter>
 #include <QScrollBar>
@@ -14,11 +15,13 @@
 #include "Command/VCVUndoCommand.h"
 #include "Command/ImageProcCommand.h"
 #include "Command/Threshold.h"
+#include "MouseEvent/qvcvmouseevent.h"
 #include "VCVChildWindow.h"
 
 QVCVChildWindow::QVCVChildWindow(QWidget *parent, Qt::WindowFlags f)
         :QWidget(parent,f)
 {
+    left_button_down = false;
     update_image = nullptr;
     setAttribute(Qt::WA_DeleteOnClose);
     setMinimumSize(300,300);
@@ -38,6 +41,8 @@ QVCVChildWindow::QVCVChildWindow(QWidget *parent, Qt::WindowFlags f)
     morphology_command = nullptr;
     edgedetection_panel = nullptr;
     edgedetection_command = nullptr;
+
+    mouse_event = nullptr;
 
     connect(v_scrollbar,SIGNAL(valueChanged(int)),this,SLOT(repaint()));
     connect(h_scrollbar,SIGNAL(valueChanged(int)),this,SLOT(repaint()));
@@ -395,6 +400,36 @@ void QVCVChildWindow::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 }
 
+
+void QVCVChildWindow::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button()==Qt::LeftButton)
+    {
+        left_button_down = true;
+        mouse_event = new QVCVMouseEvent_Line;
+        mouse_event->MousePressEvent(event,this);
+    }
+
+}
+void QVCVChildWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if(left_button_down)
+    {
+        mouse_event->MouseMoveEvent(event,this);
+        update();
+    }
+}
+void QVCVChildWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(left_button_down)
+    {
+        mouse_event->MouseReleseEvent(event,this);
+        delete mouse_event;
+        mouse_event = nullptr;
+        left_button_down = false;
+    }
+}
+
 ////////////////////////
 //private function
 
@@ -482,6 +517,8 @@ void QVCVChildWindow::DrawClient()
     }
 
     painter.drawImage(widget_display_area,*update_image,image_display_area);
+    painter.setPen(Qt::blue);
+    painter.drawLine(QPoint(0,0),QPoint(100,100));
 }
 
 void QVCVChildWindow::DoOperation(QControlPanel *panel,QVCVUndoCommand **command, VCV_IMAGE_OPERATION operation)

@@ -16,6 +16,7 @@ class QCustomFilterDlg;
 class QThresholdPanel;
 class QMorphologyPanel;
 class QEdgeDetectionPanel;
+class QVCVMouseEvent;
 
 #define SCROLLBAR_SIZE 20
 
@@ -63,8 +64,11 @@ protected:
 	virtual void paintEvent(QPaintEvent *e);
     virtual void closeEvent(QCloseEvent *e);
 	virtual void resizeEvent(QResizeEvent *e);
-
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
 protected:
+    bool left_button_down;
 	QImage *update_image;
 
 	QScrollBar *h_scrollbar;
@@ -83,6 +87,8 @@ protected:
     QImageProcCommand *morphology_command;
     QImageProcCommand *edgedetection_command;
     QVCVData *operator_data;
+
+    QVCVMouseEvent *mouse_event;
 
 	int image_top;
 	int image_left;
