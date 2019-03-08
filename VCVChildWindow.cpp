@@ -408,7 +408,7 @@ void QVCVChildWindow::mousePressEvent(QMouseEvent *event)
         left_button_down = true;
         mouse_event = new QVCVMouseEvent_Line;
         QPainter painter(this);
-        mouse_event->MousePressEvent(event,&painter);
+        mouse_event->MousePressEvent(event);
     }
 
 }
@@ -417,7 +417,7 @@ void QVCVChildWindow::mouseMoveEvent(QMouseEvent *event)
     if(left_button_down)
     {
         QPainter painter(this);
-        mouse_event->MouseMoveEvent(event,&painter);
+        mouse_event->MouseMoveEvent(event);
         update();
     }
 }
@@ -426,7 +426,7 @@ void QVCVChildWindow::mouseReleaseEvent(QMouseEvent *event)
     if(left_button_down)
     {
         QPainter painter(this);
-        mouse_event->MouseReleseEvent(event,&painter);
+        mouse_event->MouseReleseEvent(event);
         delete mouse_event;
         mouse_event = nullptr;
         left_button_down = false;
