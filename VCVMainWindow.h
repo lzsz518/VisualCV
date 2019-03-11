@@ -61,6 +61,8 @@ private slots:
     void slotPanelClose(QControlPanel *panel);
 
     void slotShowUndoView();
+
+    void slotMutualToolbar(bool checked);
 private:
 	QMenu *file_menu;
 	QMenu *view_menu;
@@ -99,6 +101,13 @@ private:
     QAction *edge_sobel;
     QAction *edge_canny;
 
+    QAction *draw_line;
+    QAction *draw_rect;
+    QAction *draw_free;
+    QAction *draw_ellipse;
+    QAction *draw_polygon;
+    QAction *color_select;
+
     QAction *about;
 
     QAction *undoviewShow;
@@ -110,11 +119,14 @@ private:
     QDockWidget *dockwidget;
     VCV_IMAGE_OPERATION image_operation;
 
+    QVector<QAction*> mutual_action;
+
 	void InitUI();
 	void CreateAction();
 	void CreateMenu();
     void CreateUndoView();
 	void CreateConnection();
+    void CreateToolbar();
 
     void ShowFilterPanel(VCV_IMAGE_OPERATION operation);
     void ShowThresholdPanel(VCV_IMAGE_OPERATION operation);
