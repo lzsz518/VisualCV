@@ -101,9 +101,7 @@ public:
     virtual void MousePressEvent(QMouseEvent *event);
     virtual void MouseMoveEvent(QMouseEvent *event);
     virtual void MouseReleaseEvent(QMouseEvent * event);
-    virtual void darw(QPainter *painter);
-private:
-    void CorrectThePosition(QPoint &p1, QPoint &p2);
+    virtual void draw(QPainter *painter);
 };
 
 #endif // QVCVMOUSEEVENT_H

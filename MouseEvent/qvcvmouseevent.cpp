@@ -108,7 +108,9 @@ void QVCVMouseEvent_Rectangle::MousePressEvent(QMouseEvent *event)
     QVCVMouseEventData_Rectangle *data = (QVCVMouseEventData_Rectangle*)GetData();
     if(data!=nullptr)
     {
-        data->SetRect(QRect(event->pos(),event->pos()));
+        QPoint topleft = event->pos();
+        QPoint bottomright = event->pos();
+        data->SetRect(QRect(topleft,bottomright));
     }
 }
 
@@ -119,7 +121,6 @@ void QVCVMouseEvent_Rectangle::MouseMoveEvent(QMouseEvent *event)
     {
         QPoint topleft = data->GetRect().topLeft();
         QPoint bottomright = event->pos();
-        CorrectThePosition(topleft,bottomright);
         data->SetRect(QRect(topleft,bottomright));
     }
 }
@@ -131,12 +132,11 @@ void QVCVMouseEvent_Rectangle::MouseReleaseEvent(QMouseEvent *event)
     {
         QPoint topleft = data->GetRect().topLeft();
         QPoint bottomright = event->pos();
-        CorrectThePosition(topleft,bottomright);
         data->SetRect(QRect(topleft,bottomright));
     }
 }
 
-void QVCVMouseEvent_Rectangle::darw(QPainter *painter)
+void QVCVMouseEvent_Rectangle::draw(QPainter *painter)
 {
     QVCVMouseEventData_Rectangle *data = (QVCVMouseEventData_Rectangle*)GetData();
     if(data!=nullptr)
@@ -145,23 +145,6 @@ void QVCVMouseEvent_Rectangle::darw(QPainter *painter)
         painter->drawRect(data->GetRect());
     }
 }
-
-void QVCVMouseEvent_Rectangle::CorrectThePosition(QPoint &p1, QPoint &p2)
-{
-    if(p1.x()>p2.x())
-    {
-        int temp = p1.x();
-        p1.setX(p2.x());
-        p2.setX(temp);
-    }
-    if(p1.y()<p2.y())
-    {
-        int temp = p1.y();
-        p1.setY(p2.y());
-        p2.setY(temp);
-    }
-}
-
 
 
 
