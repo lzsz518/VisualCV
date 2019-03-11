@@ -406,7 +406,7 @@ void QVCVChildWindow::mousePressEvent(QMouseEvent *event)
     if(event->button()==Qt::LeftButton)
     {
         left_button_down = true;
-        mouse_event = new QVCVMouseEvent_Line;
+        mouse_event = new QVCVMouseEvent_Rectangle;
         QPainter painter(this);
         mouse_event->MousePressEvent(event);
     }
@@ -426,7 +426,7 @@ void QVCVChildWindow::mouseReleaseEvent(QMouseEvent *event)
     if(left_button_down)
     {
         QPainter painter(this);
-        mouse_event->MouseReleseEvent(event);
+        mouse_event->MouseReleaseEvent(event);
         delete mouse_event;
         mouse_event = nullptr;
         left_button_down = false;
