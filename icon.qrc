@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resource/ColorSelector.png</file>
+        <file>Resource/DrawEllipse.png</file>
+        <file>Resource/DrawFree.png</file>
+        <file>Resource/DrawLine.png</file>
+        <file>Resource/DrawPolygon.png</file>
+        <file>Resource/DrawRect.png</file>
+    </qresource>
+</RCC>

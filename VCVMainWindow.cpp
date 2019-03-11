@@ -6,6 +6,7 @@
 #include <QStatusBar>
 #include <QFileDialog>
 #include <QTabWidget>
+#include <QToolBar>
 #include <QUndoView>
 #include <QDockWidget>
 #include <QHBoxLayout>
@@ -56,6 +57,7 @@ void QVCVMainWindow::InitUI()
     CreateAction();
     CreateMenu();
     CreateUndoView();
+    CreateToolbar();
 
     QLabel *label1 = new QLabel(tr("OK"));
     statusBar()->addWidget(label1);
@@ -89,6 +91,17 @@ void QVCVMainWindow::CreateAction()
     edge_laplaction = new QAction(tr("Laplacian"),this);
     edge_sobel = new QAction(tr("Sobel"),this);
     edge_canny = new QAction(tr("Canny"),this);
+
+    draw_line = new QAction(QIcon(":/Resource/DrawLine.png"),tr("Line"),this);
+    draw_rect = new QAction(QIcon(":/Resource/DrawRect.png"),tr("Rect"),this);
+    draw_ellipse = new QAction(QIcon(":/Resource/DrawEllipse.png"),tr("Ellipse"),this);
+    draw_free = new QAction(QIcon(":/Resource/DrawFree.png"),tr("Pencil"),this);
+    draw_polygon = new QAction(QIcon(":/Resource/DrawPolygon.png"),tr("Polygon"),this);
+    draw_line->setCheckable(true);
+    draw_rect->setCheckable(true);
+    draw_ellipse->setCheckable(true);
+    draw_free->setCheckable(true);
+    draw_polygon->setCheckable(true);
 
     about = new QAction(tr("About"),this);
 
@@ -414,8 +427,31 @@ void QVCVMainWindow::CreateConnection()
     connect(view_tile,SIGNAL(triggered()),mdi_area,SLOT(tileSubWindows()));
     connect(view_cascade,SIGNAL(triggered()),mdi_area,SLOT(cascadeSubWindows()));
 
+    connect(draw_line,SIGNAL(toggled(bool)),this,SLOT(slotMutualToolbar(bool)));
+    connect(draw_rect,SIGNAL(toggled(bool)),this,SLOT(slotMutualToolbar(bool)));
+    connect(draw_free,SIGNAL(toggled(bool)),this,SLOT(slotMutualToolbar(bool)));
+    connect(draw_ellipse,SIGNAL(toggled(bool)),this,SLOT(slotMutualToolbar(bool)));
+    connect(draw_polygon,SIGNAL(toggled(bool)),this,SLOT(slotMutualToolbar(bool)));
+
     connect(about,SIGNAL(triggered(bool)),this,SLOT(slotAboutDialog()));
     connect(undoviewShow,SIGNAL(triggered(bool)),this,SLOT(slotShowUndoView()));
+}
+
+void QVCVMainWindow::CreateToolbar()
+{
+    QToolBar *toolbar = new QToolBar;
+    toolbar->addAction(draw_line);
+    toolbar->addAction(draw_rect);
+    toolbar->addAction(draw_free);
+    toolbar->addAction(draw_ellipse);
+    toolbar->addAction(draw_polygon);
+    addToolBar(toolbar);
+
+    mutual_action.append(draw_line);
+    mutual_action.append(draw_rect);
+    mutual_action.append(draw_free);
+    mutual_action.append(draw_ellipse);
+    mutual_action.append(draw_polygon);
 }
 
 void QVCVMainWindow::slotAboutDialog()
@@ -445,6 +481,24 @@ void QVCVMainWindow::slotShowUndoView()
     }
     else {
         CreateUndoView();
+    }
+}
+
+void QVCVMainWindow::slotMutualToolbar(bool checked)
+{
+    QAction *action = static_cast<QAction*>(sender());
+    if(action==nullptr)
+        return;
+
+    if(checked)
+    {
+        for(int i=0;i<mutual_action.size();++i)
+        {
+            if(action!=mutual_action[i])
+            {
+                mutual_action[i]->setChecked(false);
+            }
+        }
     }
 }
 
