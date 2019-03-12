@@ -94,6 +94,29 @@ private:
         QRect rect;
 };
 
+class QVCVMouseEventData_Pencil :public QVCVMouseEventData_Shape
+{
+public:
+    QVCVMouseEventData_Pencil(){
+
+    }
+    ~QVCVMouseEventData_Pencil(){
+
+    }
+    void AddPoint(const QPoint &p){
+        points.append(p);
+    }
+    const QVector<QPoint>* GetPoints(){
+        return &points;
+    }
+    QVector<QPoint>& GetPointsRef(){
+        return points;
+    }
+
+private:
+    QVector<QPoint> points;
+};
+
 
 class QVCVMouseEvent : public QWidget
 {
@@ -153,7 +176,19 @@ public:
     virtual void draw(QPainter *painter);
 };
 
+class QVCVMouseEvent_Pencil : public QVCVMouseEvent
+{
+    Q_OBJECT
+public:
+    QVCVMouseEvent_Pencil();
+    ~QVCVMouseEvent_Pencil();
 
+public:
+    virtual void MousePressEvent(QMouseEvent *event);
+    virtual void MouseMoveEvent(QMouseEvent *event);
+    virtual void MouseReleaseEvent(QMouseEvent * event);
+    virtual void draw(QPainter *painter);
+};
 
 
 

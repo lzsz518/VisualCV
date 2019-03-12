@@ -406,7 +406,7 @@ void QVCVChildWindow::mousePressEvent(QMouseEvent *event)
     if(event->button()==Qt::LeftButton)
     {
         left_button_down = true;
-        mouse_event = new QVCVMouseEvent_Ellipse;
+        mouse_event = new QVCVMouseEvent_Pencil;
         QPainter painter(this);
         mouse_event->MousePressEvent(event);
     }

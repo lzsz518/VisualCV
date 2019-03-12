@@ -97,6 +97,7 @@ void QVCVMainWindow::CreateAction()
     draw_ellipse = new QAction(QIcon(":/Resource/DrawEllipse.png"),tr("Ellipse"),this);
     draw_free = new QAction(QIcon(":/Resource/DrawFree.png"),tr("Pencil"),this);
     draw_polygon = new QAction(QIcon(":/Resource/DrawPolygon.png"),tr("Polygon"),this);
+    color_select = new QAction(QIcon(":/Resource/ColorSelector.png"),tr("Color"),this);
     draw_line->setCheckable(true);
     draw_rect->setCheckable(true);
     draw_ellipse->setCheckable(true);
@@ -445,6 +446,9 @@ void QVCVMainWindow::CreateToolbar()
     toolbar->addAction(draw_free);
     toolbar->addAction(draw_ellipse);
     toolbar->addAction(draw_polygon);
+    toolbar->addSeparator();
+    toolbar->addAction(color_select);
+
     addToolBar(toolbar);
 
     mutual_action.append(draw_line);

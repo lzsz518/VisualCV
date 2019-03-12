@@ -173,9 +173,61 @@ void QVCVMouseEvent_Ellipse::draw(QPainter *painter)
     }
 }
 
+QVCVMouseEvent_Pencil::QVCVMouseEvent_Pencil()
+{
+    InitializeData(new QVCVMouseEventData_Pencil);
+}
 
+QVCVMouseEvent_Pencil::~QVCVMouseEvent_Pencil()
+{
 
+}
 
+void QVCVMouseEvent_Pencil::MousePressEvent(QMouseEvent *event)
+{
+    QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
+    if(data!=nullptr)
+    {
+        data->AddPoint(event->pos());
+    }
+}
+
+void QVCVMouseEvent_Pencil::MouseMoveEvent(QMouseEvent *event)
+{
+    QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
+    if(data!=nullptr)
+    {
+        data->AddPoint(event->pos());
+    }
+}
+
+void QVCVMouseEvent_Pencil::MouseReleaseEvent(QMouseEvent *event)
+{
+    QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
+    if(data!=nullptr)
+    {
+        data->AddPoint(event->pos());
+    }
+}
+
+void QVCVMouseEvent_Pencil::draw(QPainter *painter)
+{
+    QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
+    if(data!=nullptr)
+    {
+        const QVector<QPoint>* points = data->GetPoints();
+        if(points->isEmpty())
+            return;
+        QVector<QPoint>::const_iterator itor = points->begin();
+        QPoint p = *itor;
+        ++itor;
+        for(;itor<points->end();++itor)
+        {
+            painter->drawLine(p,*itor);
+            p = *itor;
+        }
+    }
+}
 
 
 
