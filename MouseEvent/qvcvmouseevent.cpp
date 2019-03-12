@@ -31,7 +31,16 @@ void QVCVMouseEvent::MouseReleaseEvent(QMouseEvent *event)
 
 void QVCVMouseEvent::draw(QPainter *painter)
 {
-
+    QVCVMouseEventData_Shape *data = static_cast<QVCVMouseEventData_Shape*>(GetData());
+    QPen *pen = nullptr;
+    if(data!=nullptr)
+    {
+        data->GetPen(pen);
+    }
+    if(pen==nullptr)
+        data->SetPen(painter->pen());
+    else
+        painter->setPen(*pen);
 }
 
 QVCVMouseEventData* QVCVMouseEvent::GetData()
@@ -56,7 +65,7 @@ QVCVMouseEvent_Line::~QVCVMouseEvent_Line()
 
 void QVCVMouseEvent_Line::MousePressEvent(QMouseEvent *event)
 {
-    QVCVMouseEventData_Line *data = (QVCVMouseEventData_Line*)GetData();
+    QVCVMouseEventData_Line *data = static_cast<QVCVMouseEventData_Line*>(GetData());
     if(data!=nullptr)
     {
         data->SetPoint1(event->pos());
@@ -66,7 +75,7 @@ void QVCVMouseEvent_Line::MousePressEvent(QMouseEvent *event)
 
 void QVCVMouseEvent_Line::MouseMoveEvent(QMouseEvent *event)
 {
-    QVCVMouseEventData_Line *data = (QVCVMouseEventData_Line*)GetData();
+    QVCVMouseEventData_Line *data = static_cast<QVCVMouseEventData_Line*>(GetData());
     if(data!=nullptr)
     {
         data->SetPoint2(event->pos());
@@ -75,7 +84,7 @@ void QVCVMouseEvent_Line::MouseMoveEvent(QMouseEvent *event)
 
 void QVCVMouseEvent_Line::MouseReleaseEvent(QMouseEvent *event)
 {
-    QVCVMouseEventData_Line *data = (QVCVMouseEventData_Line*)GetData();
+    QVCVMouseEventData_Line *data = static_cast<QVCVMouseEventData_Line*>(GetData());
     if(data!=nullptr)
         data->SetPoint2(event->pos());
 }
@@ -85,10 +94,10 @@ void QVCVMouseEvent_Line::draw(QPainter *painter)
     if(painter==nullptr)
         return;
 
-    QVCVMouseEventData_Line *data = (QVCVMouseEventData_Line*)GetData();
+    QVCVMouseEvent::draw(painter);
+    QVCVMouseEventData_Line *data = static_cast<QVCVMouseEventData_Line*>(GetData());
     if(data!=nullptr)
     {
-        painter->setPen(QColor(0,255,0));
         painter->drawLine(data->GetPoint1(),data->GetPoint2());
     }
 }
@@ -105,18 +114,16 @@ QVCVMouseEvent_Rectangle::~QVCVMouseEvent_Rectangle()
 
 void QVCVMouseEvent_Rectangle::MousePressEvent(QMouseEvent *event)
 {
-    QVCVMouseEventData_Rectangle *data = (QVCVMouseEventData_Rectangle*)GetData();
+    QVCVMouseEventData_Rectangle *data = static_cast<QVCVMouseEventData_Rectangle*>(GetData());
     if(data!=nullptr)
     {
-        QPoint topleft = event->pos();
-        QPoint bottomright = event->pos();
-        data->SetRect(QRect(topleft,bottomright));
+        data->SetRect(QRect(event->pos(),event->pos()));
     }
 }
 
 void QVCVMouseEvent_Rectangle::MouseMoveEvent(QMouseEvent *event)
 {
-    QVCVMouseEventData_Rectangle *data = (QVCVMouseEventData_Rectangle*)GetData();
+    QVCVMouseEventData_Rectangle *data = static_cast<QVCVMouseEventData_Rectangle*>(GetData());
     if(data!=nullptr)
     {
         QPoint topleft = data->GetRect().topLeft();
@@ -127,7 +134,7 @@ void QVCVMouseEvent_Rectangle::MouseMoveEvent(QMouseEvent *event)
 
 void QVCVMouseEvent_Rectangle::MouseReleaseEvent(QMouseEvent *event)
 {
-    QVCVMouseEventData_Rectangle *data = (QVCVMouseEventData_Rectangle*)GetData();
+    QVCVMouseEventData_Rectangle *data = static_cast<QVCVMouseEventData_Rectangle*>(GetData());
     if(data!=nullptr)
     {
         QPoint topleft = data->GetRect().topLeft();
@@ -138,19 +145,33 @@ void QVCVMouseEvent_Rectangle::MouseReleaseEvent(QMouseEvent *event)
 
 void QVCVMouseEvent_Rectangle::draw(QPainter *painter)
 {
-    QVCVMouseEventData_Rectangle *data = (QVCVMouseEventData_Rectangle*)GetData();
+    QVCVMouseEventData_Rectangle *data = static_cast<QVCVMouseEventData_Rectangle*>(GetData());
+    QVCVMouseEvent::draw(painter);
     if(data!=nullptr)
     {
-        painter->setPen(QColor(0,255,0));
         painter->drawRect(data->GetRect());
     }
 }
 
+QVCVMouseEvent_Ellipse::QVCVMouseEvent_Ellipse()
+{
 
+}
 
+QVCVMouseEvent_Ellipse::~QVCVMouseEvent_Ellipse()
+{
 
+}
 
-
+void QVCVMouseEvent_Ellipse::draw(QPainter *painter)
+{
+    QVCVMouseEventData_Rectangle *data = static_cast<QVCVMouseEventData_Rectangle*>(GetData());
+    QVCVMouseEvent::draw(painter);
+    if(data!=nullptr)
+    {
+        painter->drawEllipse(data->GetRect());
+    }
+}
 
 
 

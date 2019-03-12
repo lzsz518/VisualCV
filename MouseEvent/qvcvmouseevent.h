@@ -1,6 +1,7 @@
 #ifndef QVCVMOUSEEVENT_H
 #define QVCVMOUSEEVENT_H
 
+#include <QPen>
 #include <QWidget>
 
 class QVCVMouseEventData
@@ -10,7 +11,44 @@ public:
     ~QVCVMouseEventData(){}
 };
 
-class QVCVMouseEventData_Line : public QVCVMouseEventData
+class QVCVMouseEventData_Shape : public QVCVMouseEventData
+{
+   public:
+    QVCVMouseEventData_Shape(){
+        pen = nullptr;
+    }
+    ~QVCVMouseEventData_Shape(){
+        if(pen!=nullptr)
+            delete pen;
+    }
+
+    void SetPen(const QPen &p){
+        if(pen==nullptr)
+        {
+            pen = new QPen(p);
+        }
+        else {
+            *pen = QPen(p);
+        }
+    }
+    void GetPen(QPen *p){
+        if(pen!=nullptr)
+        {
+            if(p!=nullptr)
+                delete p;
+
+            p = new QPen;
+            *p = *pen;
+        }
+        else
+            p = nullptr;
+    }
+
+private:
+    QPen *pen;
+};
+
+class QVCVMouseEventData_Line : public QVCVMouseEventData_Shape
 {
 public:
     QVCVMouseEventData_Line(){
@@ -39,7 +77,7 @@ private:
     QPoint Point2;
 };
 
-class QVCVMouseEventData_Rectangle : public QVCVMouseEventData
+class QVCVMouseEventData_Rectangle : public QVCVMouseEventData_Shape
 {
 public:
     QVCVMouseEventData_Rectangle(){
@@ -55,6 +93,7 @@ public:
 private:
         QRect rect;
 };
+
 
 class QVCVMouseEvent : public QWidget
 {
@@ -103,5 +142,26 @@ public:
     virtual void MouseReleaseEvent(QMouseEvent * event);
     virtual void draw(QPainter *painter);
 };
+
+class QVCVMouseEvent_Ellipse : public QVCVMouseEvent_Rectangle
+{
+    Q_OBJECT
+public:
+    QVCVMouseEvent_Ellipse();
+    virtual ~QVCVMouseEvent_Ellipse();
+public:
+    virtual void draw(QPainter *painter);
+};
+
+
+
+
+
+
+
+
+
+
+
 
 #endif // QVCVMOUSEEVENT_H
