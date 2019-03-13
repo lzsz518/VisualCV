@@ -1,0 +1,12 @@
+#ifndef QSYSTEMSTATUS_H
+#define QSYSTEMSTATUS_H
+
+enum DrawStatus{EMPTY,DRAWLINE,DRAWPENCIL,DRAWELLIPSE,DRAWRECTANGLE,DRAWPOLYGON};
+
+class QSystemStatus
+{
+public:
+    QSystemStatus();
+};
+
+#endif // QSYSTEMSTATUS_H
