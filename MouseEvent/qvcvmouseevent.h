@@ -190,6 +190,19 @@ public:
     virtual void draw(QPainter *painter);
 };
 
+class QVCVMouseEvent_Polygon : public QVCVMouseEvent_Pencil
+{
+    Q_OBJECT
+public:
+    QVCVMouseEvent_Polygon();
+    ~QVCVMouseEvent_Polygon();
+public:
+    virtual void MousePressEvent(QMouseEvent *event);
+    virtual void MouseMoveEvent(QMouseEvent *event);
+    virtual void MouseReleaseEvent(QMouseEvent * event);
+    virtual void draw(QPainter *painter);
+};
+
 
 
 

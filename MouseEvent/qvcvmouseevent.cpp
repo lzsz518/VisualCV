@@ -229,13 +229,56 @@ void QVCVMouseEvent_Pencil::draw(QPainter *painter)
     }
 }
 
+QVCVMouseEvent_Polygon::QVCVMouseEvent_Polygon()
+{
+   InitializeData(new QVCVMouseEventData_Pencil);
+}
 
+QVCVMouseEvent_Polygon::~QVCVMouseEvent_Polygon()
+{
 
+}
 
+void QVCVMouseEvent_Polygon::MousePressEvent(QMouseEvent *event)
+{
+    QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
+    if(data!=nullptr)
+    {
+        data->AddPoint(event->pos());
+    }
+}
 
+void QVCVMouseEvent_Polygon::MouseMoveEvent(QMouseEvent *event)
+{
+    QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
+    if(data!=nullptr)
+    {
+        QVector<QPoint> points = data->GetPointsRef();
+        points.pop_back();
+        points.push_back(event->pos());
+    }
 
+}
 
+void QVCVMouseEvent_Polygon::MouseReleaseEvent(QMouseEvent *event)
+{
+    QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
+    if(data!=nullptr)
+    {
+        QVector<QPoint> points = data->GetPointsRef();
+        if(points.size()<2)
+        {
+            points.clear();
+            return;
+        }
+        points.pop_back();
+        points.push_back(event->pos());
+    }
+}
 
-
+void QVCVMouseEvent_Polygon::draw(QPainter *painter)
+{
+    QVCVMouseEvent_Pencil::draw(painter);
+}
 
 
