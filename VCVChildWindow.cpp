@@ -16,6 +16,7 @@
 #include "Command/ImageProcCommand.h"
 #include "Command/Threshold.h"
 #include "MouseEvent/qvcvmouseevent.h"
+#include "MouseEvent/qvcvmouseeventcreator.h"
 #include "VCVChildWindow.h"
 
 QVCVChildWindow::QVCVChildWindow(QWidget *parent, Qt::WindowFlags f)
@@ -43,6 +44,7 @@ QVCVChildWindow::QVCVChildWindow(QWidget *parent, Qt::WindowFlags f)
     edgedetection_command = nullptr;
 
     mouse_event = nullptr;
+    mainwindow_status = nullptr;
 
     connect(v_scrollbar,SIGNAL(valueChanged(int)),this,SLOT(repaint()));
     connect(h_scrollbar,SIGNAL(valueChanged(int)),this,SLOT(repaint()));
@@ -95,6 +97,11 @@ bool QVCVChildWindow::Update(const Mat &image)
     repaint();
 
     return true;
+}
+
+void QVCVChildWindow::SetMainWindowStatus(const MainWindowStatus *status)
+{
+    mainwindow_status = status;
 }
 
 void QVCVChildWindow::SetDisplayScale(float scale)
@@ -406,7 +413,7 @@ void QVCVChildWindow::mousePressEvent(QMouseEvent *event)
     if(event->button()==Qt::LeftButton)
     {
         left_button_down = true;
-        mouse_event = new QVCVMouseEvent_Polygon;
+        mouse_event = QVCVMouseEventCreator::CreateMouseEvent(mainwindow_status->CurrentDrawToolKit);
         QPainter painter(this);
         mouse_event->MousePressEvent(event);
     }

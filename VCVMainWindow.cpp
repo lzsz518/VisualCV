@@ -5,6 +5,7 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QFileDialog>
+#include <QColorDialog>
 #include <QTabWidget>
 #include <QToolBar>
 #include <QUndoView>
@@ -45,11 +46,13 @@ QVCVMainWindow::QVCVMainWindow(QWidget *parent , Qt::WindowFlags f)
     setCentralWidget(mdi_area);
 
     CreateConnection();
+
+    mainwindow_status = new MainWindowStatus;
 }
 
 QVCVMainWindow::~QVCVMainWindow()
 {
-
+    mutual_action.clear();
 }
 
 void QVCVMainWindow::InitUI()
@@ -218,6 +221,7 @@ void QVCVMainWindow::OpenFile()
         vcvdata->Load(files.at(i));
         viewer->setWindowTitle(files.at(i));
         mdi_area->addSubWindow(sub_win);
+        viewer->SetMainWindowStatus(mainwindow_status);
         QDataModelInstance::Instance()->AddData(vcvdata);
         QDataModelInstance::Instance()->Notify();
 
@@ -434,6 +438,13 @@ void QVCVMainWindow::CreateConnection()
     connect(draw_ellipse,SIGNAL(toggled(bool)),this,SLOT(slotMutualToolbar(bool)));
     connect(draw_polygon,SIGNAL(toggled(bool)),this,SLOT(slotMutualToolbar(bool)));
 
+    connect(draw_line,SIGNAL(toggled(bool)),this,SLOT(slotActionDrawLine(bool)));
+    connect(draw_rect,SIGNAL(toggled(bool)),this,SLOT(slotActionDrawRect(bool)));
+    connect(draw_free,SIGNAL(toggled(bool)),this,SLOT(slotActionDrawFree(bool)));
+    connect(draw_ellipse,SIGNAL(toggled(bool)),this,SLOT(slotActionDrawEllipse(bool)));
+    connect(draw_polygon,SIGNAL(toggled(bool)),this,SLOT(slotActionDrawPolygon(bool)));
+    connect(color_select,SIGNAL(triggered()),this,SLOT(slotActionSelectColor()));
+
     connect(about,SIGNAL(triggered(bool)),this,SLOT(slotAboutDialog()));
     connect(undoviewShow,SIGNAL(triggered(bool)),this,SLOT(slotShowUndoView()));
 }
@@ -506,6 +517,33 @@ void QVCVMainWindow::slotMutualToolbar(bool checked)
     }
 }
 
+void QVCVMainWindow::slotActionDrawLine(bool checked)
+{
+    SetDrawToolKitStatus(DRAWLINE,checked);
+}
+void QVCVMainWindow::slotActionDrawRect(bool checked)
+{
+    SetDrawToolKitStatus(DRAWRECTANGLE,checked);
+}
+void QVCVMainWindow::slotActionDrawFree(bool checked)
+{
+    SetDrawToolKitStatus(DRAWPENCIL,checked);
+}
+void QVCVMainWindow::slotActionDrawEllipse(bool checked)
+{
+    SetDrawToolKitStatus(DRAWELLIPSE,checked);
+}
+void QVCVMainWindow::slotActionDrawPolygon(bool checked)
+{
+    SetDrawToolKitStatus(DRAWPOLYGON,checked);
+}
+void QVCVMainWindow::slotActionSelectColor()
+{
+    QColorDialog d;
+    if(d.exec()==QDialog::Accepted)
+        mainwindow_status->CurrentColor = d.currentColor();
+
+}
 void QVCVMainWindow::SetMenuStatus(const bool flag)
 {
     if(filter_menu!=nullptr)
@@ -514,4 +552,16 @@ void QVCVMainWindow::SetMenuStatus(const bool flag)
         morphological_menu->setEnabled(flag);
     if(edge_menu!=nullptr)
         edge_menu->setEnabled(flag);
+}
+
+void QVCVMainWindow::SetDrawToolKitStatus(const DrawStatus status, const bool checked)
+{
+    if(mainwindow_status!=nullptr&&checked)
+    {
+        mainwindow_status->CurrentDrawToolKit = status;
+    }
+    else
+    {
+        mainwindow_status->CurrentDrawToolKit = EMPTY;
+    }
 }

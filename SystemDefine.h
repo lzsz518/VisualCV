@@ -13,6 +13,8 @@
 using namespace std;
 using namespace cv;
 
+enum DrawStatus{EMPTY,DRAWLINE,DRAWPENCIL,DRAWELLIPSE,DRAWRECTANGLE,DRAWPOLYGON};
+
 enum VCV_IMAGE_OPERATION
 {
 	IMAGE_NONE,
@@ -114,6 +116,12 @@ public:
     bool l2gradient;
     double scale;
     double delta;
+};
+
+struct MainWindowStatus
+{
+    DrawStatus CurrentDrawToolKit;
+    QColor CurrentColor;
 };
 
 #endif

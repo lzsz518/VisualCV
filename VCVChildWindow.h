@@ -30,6 +30,7 @@ public:
 public:
 
 	bool Update(const Mat &image);
+    void SetMainWindowStatus(const MainWindowStatus *status);
 
 	void SetDisplayScale(float scale);
 	float GetDisplayScale();
@@ -89,6 +90,7 @@ protected:
     QVCVData *operator_data;
 
     QVCVMouseEvent *mouse_event;
+    const MainWindowStatus *mainwindow_status;
 
 	int image_top;
 	int image_left;

@@ -18,6 +18,7 @@ class QMdiSubWindow;
 class QCustomFilterDlg;
 class QCommandBuilder;
 class QVCVUndoCommand;
+class QVCVChildWindow;
 
 
 class QVCVMainWindow : public QMainWindow
@@ -63,6 +64,12 @@ private slots:
     void slotShowUndoView();
 
     void slotMutualToolbar(bool checked);
+    void slotActionDrawLine(bool checked);
+    void slotActionDrawRect(bool checked);
+    void slotActionDrawFree(bool checked);
+    void slotActionDrawEllipse(bool checked);
+    void slotActionDrawPolygon(bool checked);
+    void slotActionSelectColor();
 private:
 	QMenu *file_menu;
 	QMenu *view_menu;
@@ -114,6 +121,8 @@ private:
 
 	QMdiArea *mdi_area;
 
+    MainWindowStatus *mainwindow_status;
+
 	QTabWidget *tabwidget;
     QUndoView *undoview;
     QDockWidget *dockwidget;
@@ -133,8 +142,8 @@ private:
     void ShowMorphologicalPanel(VCV_IMAGE_OPERATION operation);
     void ShowEdgeDetectionPanel(VCV_IMAGE_OPERATION operation);
 
-
     void SetMenuStatus(const bool flag);
+    void SetDrawToolKitStatus(const DrawStatus status, const bool checked);
 };
 
 #endif
