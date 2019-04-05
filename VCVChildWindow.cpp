@@ -410,29 +410,70 @@ void QVCVChildWindow::resizeEvent(QResizeEvent *e)
 
 void QVCVChildWindow::mousePressEvent(QMouseEvent *event)
 {
+    if(event->button()==Qt::LeftButton && mainwindow_status->CurrentDrawToolKit==DRAWPOLYGON)
+    {
+        if(mouse_event==nullptr)
+            mouse_event = QVCVMouseEventCreator::CreateMouseEvent(mainwindow_status->CurrentDrawToolKit);
+        if(mouse_event!=nullptr)
+        {
+            mouse_event->MousePressEvent(event);
+            setMouseTracking(true);
+        }
+        return;
+    }
+
     if(event->button()==Qt::LeftButton)
     {
         left_button_down = true;
         mouse_event = QVCVMouseEventCreator::CreateMouseEvent(mainwindow_status->CurrentDrawToolKit);
-        QPainter painter(this);
-        mouse_event->MousePressEvent(event);
+        if(mouse_event!=nullptr)
+        {
+            QPainter painter(this);
+            mouse_event->MousePressEvent(event);
+        }
+        return;
     }
-
 }
+
 void QVCVChildWindow::mouseMoveEvent(QMouseEvent *event)
 {
+    if(mouse_event==nullptr)
+        return;
+    if(mainwindow_status->CurrentDrawToolKit==DRAWPOLYGON)
+    {
+        if(mouse_event!=nullptr)
+        {
+            mouse_event->MouseMoveEvent(event);
+            update();
+            return;
+        }
+    }
     if(left_button_down)
     {
-        QPainter painter(this);
         mouse_event->MouseMoveEvent(event);
         update();
+        return;
     }
 }
+
 void QVCVChildWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(left_button_down)
+    if(mouse_event==nullptr)
+        return;
+    if(event->button()==Qt::LeftButton && mainwindow_status->CurrentDrawToolKit==DRAWPOLYGON)
     {
-        QPainter painter(this);
+        mouse_event->MouseReleaseEvent(event);
+    }
+    if(mainwindow_status->CurrentDrawToolKit==DRAWPOLYGON && event->button()==Qt::RightButton)
+    {
+        mouse_event->MouseReleaseEvent(event);
+        delete mouse_event;
+        mouse_event = nullptr;
+        setMouseTracking(false);
+        return;
+    }
+    if(left_button_down && mainwindow_status->CurrentDrawToolKit!=DRAWPOLYGON)
+    {
         mouse_event->MouseReleaseEvent(event);
         delete mouse_event;
         mouse_event = nullptr;
@@ -528,7 +569,8 @@ void QVCVChildWindow::DrawClient()
 
     painter.drawImage(widget_display_area,*update_image,image_display_area);
 
-    if(left_button_down)
+    if((mouse_event!=nullptr && left_button_down)
+            ||(mouse_event!=nullptr&&mainwindow_status->CurrentDrawToolKit==DRAWPOLYGON))
     {
         mouse_event->draw(&painter);
     }

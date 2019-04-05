@@ -245,6 +245,7 @@ void QVCVMouseEvent_Polygon::MousePressEvent(QMouseEvent *event)
     if(data!=nullptr)
     {
         data->AddPoint(event->pos());
+        data->SetCurrentPos(event->pos());
     }
 }
 
@@ -253,32 +254,37 @@ void QVCVMouseEvent_Polygon::MouseMoveEvent(QMouseEvent *event)
     QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
     if(data!=nullptr)
     {
-        QVector<QPoint> points = data->GetPointsRef();
-        points.pop_back();
-        points.push_back(event->pos());
+        data->SetCurrentPos(event->pos());
     }
 
 }
 
 void QVCVMouseEvent_Polygon::MouseReleaseEvent(QMouseEvent *event)
 {
-    QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
-    if(data!=nullptr)
+    if(event->button()==Qt::RightButton)
     {
-        QVector<QPoint> points = data->GetPointsRef();
-        if(points.size()<2)
+        QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
+        if(data!=nullptr)
         {
-            points.clear();
-            return;
+            if(!data->GetPoints()->isEmpty())
+            {
+                data->SetCurrentPos(data->GetPoints()->at(0));
+                data->AddPoint(data->GetPoints()->at(0));
+            }
         }
-        points.pop_back();
-        points.push_back(event->pos());
     }
 }
 
 void QVCVMouseEvent_Polygon::draw(QPainter *painter)
 {
     QVCVMouseEvent_Pencil::draw(painter);
+    QVCVMouseEventData_Pencil *data = static_cast<QVCVMouseEventData_Pencil*>(GetData());
+    if(data!=nullptr)
+    {
+        const QVector<QPoint> *points = data->GetPoints();
+        if(points->size()>0)
+            painter->drawLine(points->at(points->size()-1),data->GetCurrentPos());
+    }
 }
 
 

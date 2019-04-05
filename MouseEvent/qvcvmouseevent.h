@@ -112,8 +112,14 @@ public:
     QVector<QPoint>& GetPointsRef(){
         return points;
     }
-
+    void SetCurrentPos(const QPoint &pos){
+        currentPos = pos;
+    }
+    QPoint GetCurrentPos(){
+        return currentPos;
+    }
 private:
+    QPoint currentPos;
     QVector<QPoint> points;
 };
 
@@ -202,14 +208,6 @@ public:
     virtual void MouseReleaseEvent(QMouseEvent * event);
     virtual void draw(QPainter *painter);
 };
-
-
-
-
-
-
-
-
 
 
 #endif // QVCVMOUSEEVENT_H
