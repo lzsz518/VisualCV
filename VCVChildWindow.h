@@ -24,12 +24,12 @@ class QVCVChildWindow : public QWidget
 {
 	Q_OBJECT
 public:
-    QVCVChildWindow(QWidget *parent = nullptr, Qt::WindowFlags f = nullptr);
+    QVCVChildWindow(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::Window);
 	~QVCVChildWindow();
 
 public:
 
-	bool Update(const Mat &image);
+    bool Update(const Mat &image,const vector<Rect> &sprite_region = vector<Rect>());
     void SetMainWindowStatus(const MainWindowStatus *status);
 
 	void SetDisplayScale(float scale);
@@ -41,6 +41,7 @@ public:
     QMorphologyPanel* GetMorphologyPanel(VCV_IMAGE_OPERATION operation);
     QEdgeDetectionPanel* GetEdgeDetectionPanel(VCV_IMAGE_OPERATION operation);
     bool IsAnyPanelShowed();
+    void SpriteSeparate();
 public slots:
     void FilterParameterChangeRespond(const CommandParameter *para);
     void FilterPanelOk(const CommandParameter *para);
@@ -108,6 +109,8 @@ protected:
     void PanelOk(QVCVUndoCommand **command, const CommandParameter *para);
     void PanelCencel(QVCVUndoCommand **command, const CommandParameter *para);
 
+    void FindRowPair(const Mat &mat, vector<pair<int,int>> &rowpairs);
+    void FindColumnPair(const Mat &mat, vector<pair<int,int>> &columnpairs);
 };
 
 #endif

@@ -70,6 +70,8 @@ private slots:
     void slotActionDrawEllipse(bool checked);
     void slotActionDrawPolygon(bool checked);
     void slotActionSelectColor();
+
+    void slotActionSpriteSeparate();
 private:
 	QMenu *file_menu;
 	QMenu *view_menu;
@@ -80,6 +82,7 @@ private:
 	QMenu *filter_menu;
     QMenu *morphological_menu;
     QMenu *edge_menu;
+    QMenu *sprite_menu;
 
 	QAction *file_menu_new;
 	QAction *file_menu_open;
@@ -115,9 +118,13 @@ private:
     QAction *draw_polygon;
     QAction *color_select;
 
+    QAction *sprite_separate;
+
     QAction *about;
 
     QAction *undoviewShow;
+
+    QAction *find_all_sprite;
 
 	QMdiArea *mdi_area;
 

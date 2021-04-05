@@ -57,9 +57,9 @@ bool QVCVData::Load(const QString &file_name)
 		return false;
     }
 
-	display_image.release();
-	display_image.create(original_image.rows,original_image.cols,original_image.type());
-	original_image.copyTo(display_image);
+//	display_image.release();
+//	display_image.create(original_image.rows,original_image.cols,original_image.type());
+    display_image = original_image.clone();
 
 	image_file_name = file_name;
 
@@ -172,7 +172,7 @@ bool QVCVData::SetDisplayImage(Mat &image)
     return true;
 }
 
-const Mat& QVCVData::GetOriginalImage()
+const Mat &QVCVData::GetOriginalImage()
 {
     return original_image;
 }

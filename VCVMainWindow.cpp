@@ -110,6 +110,8 @@ void QVCVMainWindow::CreateAction()
     about = new QAction(tr("About"),this);
 
     undoviewShow = new QAction(tr("UndoVeiw"),this);
+
+    sprite_separate = new QAction(tr("Separate"),this);
 }
 
 void QVCVMainWindow::CreateMenu()
@@ -120,6 +122,7 @@ void QVCVMainWindow::CreateMenu()
     filter_menu =  menuBar()->addMenu(tr("&Filter"));
     morphological_menu = menuBar()->addMenu(tr("Morphological"));
     edge_menu = menuBar()->addMenu(tr("EdgeDetection"));
+    sprite_menu = menuBar()->addMenu(tr("Sprite"));
     window_menu = menuBar()->addMenu(tr("&Window"));
     help_menu = menuBar()->addMenu(tr("&Help"));
 
@@ -151,6 +154,8 @@ void QVCVMainWindow::CreateMenu()
 
     help_menu->addAction(about);
     window_menu->addAction(undoviewShow);
+
+    sprite_menu->addAction(sprite_separate);
 }
 
 void QVCVMainWindow::CreateUndoView()
@@ -447,6 +452,8 @@ void QVCVMainWindow::CreateConnection()
 
     connect(about,SIGNAL(triggered(bool)),this,SLOT(slotAboutDialog()));
     connect(undoviewShow,SIGNAL(triggered(bool)),this,SLOT(slotShowUndoView()));
+
+    connect(sprite_separate,SIGNAL(triggered(bool)),this,SLOT(slotActionSpriteSeparate()));
 }
 
 void QVCVMainWindow::CreateToolbar()
@@ -564,4 +571,10 @@ void QVCVMainWindow::SetDrawToolKitStatus(const DrawStatus status, const bool ch
     {
         mainwindow_status->CurrentDrawToolKit = EMPTY;
     }
+}
+
+void QVCVMainWindow::slotActionSpriteSeparate()
+{
+    if(mdi_area->activeSubWindow()!=nullptr)
+        ((QVCVChildWindow*)mdi_area->activeSubWindow()->widget())->SpriteSeparate();
 }

@@ -46,13 +46,15 @@ public:
 	int width();
 	int height();
 
-    const Mat& GetDisplayImage();
+    const Mat &GetDisplayImage();
 	bool SetDisplayImage(Mat &image);
 	
-    const Mat& GetOriginalImage();
+    const Mat &GetOriginalImage();
 
 	QAction* GetUndoAction();
 	QAction* GetRedoAction();
+
+    vector<Rect>* GetSpriteRegionList();
 
 protected:
 	bool initicialition;
@@ -71,6 +73,7 @@ protected:
 
 	QVCVChildWindow *data_viewer;
     QUndoView *undo_viewer;
+    std::vector<Rect> sprite_region;
 };
 
 #endif

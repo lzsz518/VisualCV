@@ -2,6 +2,9 @@
 #include <QImage>
 #include <QPainter>
 #include <QScrollBar>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 #include "ControlPanel.h"
 #include "FilterPanel.h"
 #include "CustomFilterDlg.h"
@@ -17,6 +20,7 @@
 #include "Command/Threshold.h"
 #include "MouseEvent/qvcvmouseevent.h"
 #include "MouseEvent/qvcvmouseeventcreator.h"
+#include "opencv2/highgui/highgui.hpp"
 #include "VCVChildWindow.h"
 
 QVCVChildWindow::QVCVChildWindow(QWidget *parent, Qt::WindowFlags f)
@@ -82,7 +86,7 @@ QVCVChildWindow::~QVCVChildWindow()
 ////////////////////////
 //public function
 
-bool QVCVChildWindow::Update(const Mat &image)
+bool QVCVChildWindow::Update(const Mat &image, const vector<Rect> &sprite_region)
 {
     if(image.empty())
         return false;
@@ -646,3 +650,270 @@ void QVCVChildWindow::PanelCencel(QVCVUndoCommand **command, const CommandParame
     delete *command;
     *command = nullptr;
 }
+
+
+void QVCVChildWindow::SpriteSeparate()
+{
+    if(operator_data==nullptr)
+        return;
+
+    Mat src_mat = QDataModelInstance::Instance()->GetData(windowTitle().toStdString().c_str())->GetOriginalImage().clone();
+    if(src_mat.empty())
+        return;
+
+    vector<pair<int,int>> rowpairs;
+    vector<pair<int,int>> columnpairs;
+    FindRowPair(src_mat,rowpairs);
+    FindColumnPair(src_mat(Rect(0,rowpairs[8].first,src_mat.cols,rowpairs[8].second-rowpairs[8].first)),columnpairs);
+
+    for(size_t i=0;i<rowpairs.size();++i)
+    {
+        cv::line(src_mat,Point(0,rowpairs[i].first), Point(src_mat.cols,rowpairs[i].first),Scalar(128,0,128,255));
+        cv::line(src_mat,Point(0,rowpairs[i].second), Point(src_mat.cols,rowpairs[i].second),Scalar(128,0,128,255));
+    }
+
+    RNG rng(256);
+    for(size_t i=0;i<columnpairs.size();++i)
+    {
+        Scalar color = Scalar(rand()%257,rand()%257,rand()%257,255);
+        cv::line(src_mat,Point(columnpairs[i].first,rowpairs[8].first), Point(columnpairs[i].first,rowpairs[8].second),color);
+        cv::line(src_mat,Point(columnpairs[i].second,rowpairs[8].first), Point(columnpairs[i].second,rowpairs[8].second),color);
+    }
+
+    QFile file(QApplication::applicationDirPath()+"/Champion.json");
+    if(!file.open(QIODevice::WriteOnly))
+    {
+         qDebug() << "File open failed!";
+    }
+    else
+    {
+        qDebug() <<"File open successfully!";
+    }
+
+    QJsonDocument jdoc;
+    QJsonObject obj;
+    QJsonArray arr;
+    obj["Name"] = "Champion";
+    for(size_t i=0;i<columnpairs.size();++i)
+    {
+        QJsonObject member;
+        member["Left"] = QString("%1").arg(columnpairs[i].first);
+        member["Top"] = QString("%1").arg(rowpairs[8].first);
+        member["Width"] = QString("%1").arg(columnpairs[i].second-columnpairs[i].first);
+        member["Height"] = QString("%1").arg(rowpairs[8].second-rowpairs[8].first);
+        arr.append(member);
+    }
+
+    obj["Walk"] = arr;
+
+    jdoc.setObject(obj);
+    file.write(jdoc.toJson(QJsonDocument::Indented));
+    file.close();
+
+
+/*
+//    if(src_mat.type()!=CV_8UC4)
+//        return;
+
+////    Mat gray_mat;
+////    cvtColor(src_mat,gray_mat,CV_RGBA2GRAY);
+////    imshow("gray_mat",gray_mat);
+////    waitKey(0);
+//    Mat mat_purebk;
+//    mat_purebk.create(src_mat.rows,src_mat.cols,CV_8UC3);
+
+//    unsigned char *src_ptr, *dst_ptr;
+//    for(int i=0;i<src_mat.rows;++i)
+//    {
+//        src_ptr = src_mat.ptr<unsigned char>(i);
+//        dst_ptr = mat_purebk.ptr<unsigned char>(i);
+//        for(int j=0;j<src_mat.cols;++j)
+//        {
+//            if(src_ptr[j*4+3] != 0)
+//            {
+//                dst_ptr[j*3] = src_ptr[j*4];
+//                dst_ptr[j*3+1] = src_ptr[j*4+1];
+//                dst_ptr[j*3+2] = src_ptr[j*4+2];
+//            }
+//        }
+//    }
+*/
+
+/*K-means
+//    Mat data;
+//    src_mat.convertTo(data,CV_32F);
+//    data = data.reshape(1,data.total());
+//    Mat labels, centers;
+//    kmeans(data,3, labels, TermCriteria(TermCriteria::EPS+TermCriteria::COUNT,10,1.0),3,KMEANS_PP_CENTERS,centers);
+//    // reshape both to a single row of Vec3f pixels:
+//    centers = centers.reshape(3,centers.rows);
+//    data = data.reshape(3,data.rows);
+
+//    // replace pixel values with their center value:
+//    FILE *f = fopen("labels.csv","w");
+//    Vec3f *p = data.ptr<Vec3f>();
+//    char str[8];
+//    for (size_t i=0; i<data.rows; i++) {
+//       int center_id = labels.at<int>(i);
+//       memset(str,0,sizeof(char)*8);
+//       itoa(center_id,str,10);
+//       fprintf(f,"%s,",str);
+//       if(i%src_mat.cols==0&&i!=0)
+//           fprintf(f,"\n");
+//       p[i] = centers.at<Vec3f>(center_id);
+//    }
+//    fclose(f);
+*/
+
+////     back to 2d, and uchar:
+//    src_mat = data.reshape(3, src_mat.rows);
+//    src_mat.convertTo(src_mat, CV_8U);
+//    src_mat.convertTo(src_mat, CV_8UC1);
+
+/*    Canny
+//    blur(gray_mat, detected_edges, Size(3,3));
+//    Canny(detected_edges,detected_edges,0,0,3);
+//    imshow("canny",detected_edges);
+//        vector<vector<Point> > contours;
+//        vector<Vec4i> hierarchy;
+//        findContours(detected_edges,contours,hierarchy,RETR_TREE,CHAIN_APPROX_TC89_L1);
+
+//        RNG rng(12345);
+//        Mat drawing = Mat::zeros( detected_edges.size(), CV_8UC3 );
+//        for( size_t i = 0; i< contours.size(); i++ )
+//        {
+//            Scalar color = Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
+//            drawContours( drawing, contours, (int)i, color, 2, LINE_8, hierarchy, 0 );
+//        }
+*/
+
+/* 	Threshold
+//    Mat gray_mat;
+//    cvtColor(mat_purebk,gray_mat,CV_RGBA2GRAY);
+//    Mat bw_mat;
+//    threshold(gray_mat,bw_mat,0,255,THRESH_OTSU);
+//    vector<vector<Point> > contours;
+//    vector<Vec4i> hierarchy;
+//    findContours(bw_mat,contours,hierarchy,RETR_TREE,CHAIN_APPROX_SIMPLE);
+
+//    RNG rng(12345);
+//    Mat drawing = Mat::zeros( bw_mat.size(), CV_8UC3 );
+//    for( size_t i = 0; i< contours.size(); i++ )
+//    {
+//        Scalar color = Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
+//        drawContours( drawing, contours, (int)i, color, 2, LINE_8, hierarchy, 0 );
+//    }
+
+//    cvtColor(drawing,bw_mat,CV_RGB2GRAY);
+//    contours.clear();
+//    hierarchy.clear();
+//    findContours(bw_mat,contours,hierarchy,RETR_TREE,CHAIN_APPROX_SIMPLE);
+
+//    drawing = Mat::zeros( bw_mat.size(), CV_8UC3 );
+//    for( size_t i = 0; i< contours.size(); i++ )
+//    {
+//        Scalar color = Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
+//        drawContours( drawing, contours, (int)i, color, 2, LINE_8, hierarchy, 0 );
+//    }
+//    cvtColor(drawing,bw_mat,CV_RGB2GRAY);
+//    contours.clear();
+//    hierarchy.clear();
+//    findContours(bw_mat,contours,hierarchy,RETR_TREE,CHAIN_APPROX_SIMPLE);
+
+//    drawing = Mat::zeros( bw_mat.size(), CV_8UC3 );
+//    for( size_t i = 0; i< contours.size(); i++ )
+//    {
+//        Scalar color = Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
+//        drawContours( drawing, contours, (int)i, color, 2, LINE_8, hierarchy, 0 );
+//    }
+*/
+
+    imshow("contours",src_mat);
+    imwrite("rowcol.png",src_mat);
+    waitKey(0);
+}
+
+void QVCVChildWindow::FindRowPair(const Mat &mat, vector<pair<int,int>> &rowpairs)
+{
+    rowpairs.clear();
+    if(mat.empty()||mat.type()!=CV_8UC4)
+        return;
+
+    const unsigned char *ptr;
+    int i,j;
+    bool firstrow = false;
+    bool secondrow = false;
+    pair<int,int> rowpair;
+
+    for(i=0;i<mat.rows;++i)
+    {
+        ptr = mat.ptr<unsigned char>(i);
+        unsigned int sum = 0;
+        for(j=0;j<mat.cols;++j)
+        {
+            sum += ptr[j*4+3];
+        }
+        if(sum!=0 && firstrow==false && secondrow == false)
+        {
+            firstrow = true;
+            rowpair.first = i;
+        }
+        if(sum==0 && firstrow==true && secondrow==false)
+        {
+            firstrow = false;
+            rowpair.second = i;
+            rowpairs.push_back(rowpair);
+        }
+    }
+}
+
+void QVCVChildWindow::FindColumnPair(const Mat &mat, vector<pair<int,int>> &columnpairs)
+{
+    columnpairs.clear();
+    if(mat.empty()||mat.type()!=CV_8UC4)
+        return;
+
+    const unsigned char *ptr;
+    int i,j;
+    bool firstcolumn = false;
+    bool secondcolumn = false;
+    pair<int,int> columnpair;
+
+    for(j=0;j<mat.cols;++j)
+    {
+        int sum = 0;
+        for(i=0;i<mat.rows;++i)
+        {
+            ptr = mat.ptr<unsigned char>(i);
+            sum += ptr[j*4+3];
+        }
+        if(sum!=0 && firstcolumn==false && secondcolumn==false)
+        {
+            firstcolumn = true;
+            columnpair.first = j;
+        }
+        if(sum==0 && firstcolumn==true && secondcolumn==false)
+        {
+            firstcolumn = false;
+            columnpair.second =j;
+            if(columnpair.second-columnpair.first>10)
+                columnpairs.push_back(columnpair);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
